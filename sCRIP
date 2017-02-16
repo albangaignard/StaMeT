@@ -1,0 +1,337 @@
+
+#######################################			  DonnÃ©es de patients TCGA		  #####################################
+###########################################################################################################################
+###########################################################################################################################
+
+rm(list=ls())
+library("tcltk", lib.loc="C:/Program Files/R/R-3.3.2/library")
+getwd()
+######################### DonnÃ©es RÃ©elles  ######################################
+#setwd("C:/Users/f-benazzouz.PRET-P-N21645/Desktop/Travail_Fadwa/données TCGA BRCA/Données")
+setwd( "Z:/Travail_Fadwa/données TCGA BRCA/Données")
+source("package_loader.R")
+#remove.packages(c())
+
+load_it( c("MASS","vcd","grid","fitdistrplus","poilog","survival","colorspace","RColorBrewer","scales","limma","reshape2",
+		"flexclust","fpc","plyr","corrplot","devtools","binr","gdata","e1071", "stringr","glmnet","caret",
+		"gridExtra","preprocessCore","cluster","ape","panp","affy","scales","affycoretools","DESeq2" ,"edgeR",
+		"hgu133plus2.db","RColorBrewer","preprocessCore", "panp", "affy","simpleaffy", "affycoretools","ade4",
+		"car","stats","gplots","TDM","samr","doParallel","doSNOW","foreach","data.table"))
+			
+######################################################################################################################
+######################################################################################################################################################################			Importation des donnÃ©es		 ##########################################
+###########################################################################################################################
+###########################################################################################################################
+#																														  #
+###########################################################################################################################
+###########################################				DonnÃ©es RNA seq 			#######################################
+###########################################################################################################################
+
+
+
+
+RNA_count_normal_samples<-read.table("RNA_count_normal_samples.txt",header=TRUE,sep="\t", dec=".",na.string=c("NA","?"),as.is=T)
+RNA_count_tumor_samples<-read.table("RNA_count_tumor_samples.txt",header=TRUE,sep="\t", dec=".",na.string=c("NA","?"),as.is=T)
+
+dim(RNA_count_tumor_samples) # 20502   775
+dim(RNA_count_normal_samples) # 20502   100
+
+
+###################		Les gènes dont le nombre est très faible fournissent peu de preuves d'expression différentielle.####
+###################		Au point de vue biologique, un gène doit être exprimé à un niveau minimal 
+###################		avant qu'il soit susceptible d'être traduit en protéine ou d'être biologiquement important.
+
+
+proportion_T<-apply(RNA_count_tumor_samples, 1, function(x)( sum(x==0)/length(x))*100)
+proportion_N<-apply(RNA_count_normal_samples, 1, function(x)( sum(x==0)/length(x))*100)
+
+RNA_count_tumor_samples<-RNA_count_tumor_samples[proportion_T<30,] # 
+RNA_count_normal_samples<-RNA_count_normal_samples[proportion_N<30,]
+
+
+
+dim(RNA_count_tumor_samples) # 18056   775
+dim(RNA_count_normal_samples) # 18136    100
+
+##########################################################################################################################
+###########################################				DonnÃ©es Microarray			#######################################
+###########################################################################################################################
+
+mRNA_array_normal_samples<-read.table("mRNA_array_normal_samples.txt",header=TRUE,sep="\t", dec=".",na.string=c("NA","?"),as.is=T)
+mRNA_array_tumor_samples<-read.table("mRNA_array_tumor_samples.txt",header=TRUE,sep="\t", dec=".",na.string=c("NA","?"),as.is=T)
+dim(mRNA_array_tumor_samples) #  17814   526
+dim(mRNA_array_normal_samples) #17814    61
+
+############################### suprimer les NA 
+mRNA_array_normal_samples<-mRNA_array_normal_samples[apply(mRNA_array_normal_samples,1, function(x) !any(is.na(x))),]
+mRNA_array_tumor_samples<-mRNA_array_tumor_samples[apply(mRNA_array_tumor_samples,1, function(x) !any(is.na(x))),]
+
+
+
+
+
+
+##########################################################################################################################
+###########################################################################################################################
+#######################################			Intersection des deux plateformes	 ######################################
+#######################################################################################################################
+
+tumor_samples_commun<-intersect(colnames(RNA_count_tumor_samples),colnames(mRNA_array_tumor_samples)) 
+length(tumor_samples_commun) #486
+
+normal_samples_commun<-intersect(colnames(RNA_count_normal_samples),colnames(mRNA_array_normal_samples))
+length(normal_samples_commun) #53
+
+
+genes_commun_T<-intersect(rownames(RNA_count_tumor_samples),rownames(mRNA_array_tumor_samples))
+length(genes_commun_T) #14559
+genes_commun_N<-intersect(rownames(RNA_count_normal_samples),rownames(mRNA_array_normal_samples))
+length(genes_commun_N) # 14725
+genes_commun<-intersect(genes_commun_T,genes_commun_N)
+length(genes_commun) # 14398
+
+
+RNA=data.frame(RNA_count_tumor_samples[genes_commun,tumor_samples_commun],RNA_count_normal_samples[genes_commun,normal_samples_commun],stringsAsFactors=FALSE) #
+microarray<-data.frame(mRNA_array_tumor_samples[genes_commun,tumor_samples_commun],mRNA_array_normal_samples[genes_commun,normal_samples_commun],stringsAsFactors=FALSE)
+
+
+#write.table(microarray,"microarray_f.txt",sep="\t")
+
+
+###########################################################################################################################
+###################								 La Normalisation DESeq 								###################
+##########################################################################################################################
+###########################################################################################################################
+	
+###################	 					Construction objet DESeqDataSet : dds							###################	
+###################					DESeqDataSet est objet qui contient la table de comptage			###################	
+###################				mais aussi un tableau décrivant le plan d'expérience (coldata) 			###################	
+###################		 La fonction DESeqDataSetFromMatrix peut être utilisée si vous disposez déjà	###################
+###################		 d'une matrice de comptes de lecture préparés									###################
+###################		On doit fournir la matrice de comptage, les informations sur les échantillons   ###################
+###################(les colonnes de la matrice de comptage) en tant que data.frame et la formule de conception	###########
+###########################################################################################################################
+
+condition=factor(c(rep("TUMOR",486),rep("NORMAL",53)))
+colData <- data.frame (condition,row.names=colnames(RNA) )
+dds <- DESeqDataSetFromMatrix (RNA, colData , design=~condition)
+cds=estimateSizeFactors(dds)  # la normalisation de la profondeur de séquençage entre les échantillons
+#sizeFactors(cds)
+Data_Norm<-counts(cds,normalized=TRUE) 
+write.table(Data_Norm,"Data_Norm_DESeq2_f.txt",sep="\t")
+ ###################	Estimation de variance
+cds=estimateDispersions(cds) # estimation de la dispersion des genes sur tous les échantillons
+###################					 Le graphique de l'estimation de la dispersion 						###################	
+###################				Les estimations des gÃ¨nes (noires), les valeurs tted (Rouge)  			###################	
+###################				Et les estimations maximales aalternales nal (bleu) 					###################	
+###################	 	Points au-delÃ  de la borne infÃ©rieure Ymin sont  TirÃ©s en triangles Ã   Ymin		###################	
+x11()
+par(mfrow = c(1,1))
+DESeq2::plotDispEsts(cds)
+title("Relation entre la dispersion et la moyenne des comptages")
+
+## cette fonction permet de tester la significativité des coefficients 
+# Ceci correspond à un GLM binomial négatif et Applique les statistiques de Wald à chaque gène
+test=nbinomWaldTest(cds)
+## Extract results from DESeq2 analysis
+resDESeq2=results(test, pAdjustMethod = "BH",alpha=0.01)
+summary(resDESeq2)
+
+
+DESeq2::plotMA(resDESeq2,alpha=0.01, main = "DESeq2", ylim = c(-4, 4))
+
+
+
+###
+#BaseMean: moyenne des comptes normalisÃ©s, moyenne sur tous les Ã©chantillons dans les deux conditions log2FoldChange: le logarithme (Ã  la base 2) du changement de pli
+#LfcSE: erreurs-types de fold change logarithmique
+#Stat: statistiques de test
+#Padj: valeur de p value ajustÃ©e pour des tests multiples 
+
+table(resDESeq2$padj < 0.01)
+DEG<- rownames(subset(resDESeq2, padj < 0.01))
+
+
+#FALSE  TRUE 
+# 4191  9242 
+write.table(DEG,"DEG_DESeq2_f.txt",sep="\t")
+write.table(DEG,"DEG_DESeq2_f1.txt",sep="\t")
+save(DEG,file="DEG_DESeq2.RData")
+hist(resDESeq2$padj,col = "grey", border = "white", xlab = "", ylab = "",main = "frequences des p-values")
+DEG
+###################				Application d'une transformation logarithmique en base 2 			###################  
+RNA_Norm_DESeq2_log2=log2(Data_Norm+1)
+head(RNA_Norm_DESeq2_log2[,1:6])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###########################################################################################################################
+###################								 La Normalisation edgeR								###################
+##########################################################################################################################
+#																														 #
+##########################################################################################################################
+###################		DGEList () Est la fonction qui recouvre la matrice de comptage dans un objet edgeR	################
+
+###################		Tout d'abord, nous créons une variable de groupe EdgeR 								################
+
+group=c(rep("TUMOR",486),rep("NORMAL",53))
+cds<- DGEList( RNA , group = group )
+sum( cds$all.zeros ) # How many genes have 0 counts across all samples
+
+###################		La fonction calcNormFactors normalise les données de comptage en utilisant
+###################		 un facteur d'echélle pour les tailles d'échantillons et en minimisant les changement 
+###################		de log-fold  change entre les échantillons pour la plupârt des genes 
+###################     La méthode utilisée pour calculer les facteur d'échélles est TMM
+###################################################################################################################################
+####################################################################################################################################
+
+
+###################      TMM est recommandé pour les données RNA-Seq où la majorité (plus de la moitié) 
+###################		Des gènes sont considérés comme n'étant pas expressément exprimés entre n'importe quelle paire des échantillons
+
+
+cds<- calcNormFactors(cds,method = "TMM")
+#y$samples
+y=cds
+
+lcpm<-cpm(cds,log=TRUE)
+write.table(lcpm,"lcpm_EdgeR_f.txt",sep="\t")
+##################		La 1ere étape de l'analyse des données DGE à l'aide du modèle NB est nd'estimer le paramètre de dispersion 
+##################		L'estimation de la dispersion commune donne une idée de la variabilité globale à travers le génome pour cet ensemble de données.
+########################### estimation de la disperssion
+y <- estimateCommonDisp( y,verbose=TRUE )
+# The estimate
+y$common.dispersion
+y <- estimateTrendedDisp(y)
+# estimer tagwise dispersions
+y <- estimateTagwiseDisp(y)
+plotBCV(y)
+plotMeanVar( y, show.raw.vars=TRUE ,show.tagwise.vars=TRUE ,show.binned.common.disp.vars=FALSE , show.ave.raw.vars=FALSE ,
+dispersion.method = "qcml" , NBline = TRUE , nbins = 100 ,pch = 16 ,xlab ="Mean Expression (Log2 Scale)" ,
+ylab = "Variance (Log2 Scale)" ,main = "Mean-Variance Plot" )
+#################	 Le test exact est basé sur les méthodes qCML. Connaissant la distribution conditionnelle pour la somme des comptages dans un groupe
+#################		on peut calculer des valeurs p exactes en additionnant toutes les sommes de comptes ayant une probabilité inférieure
+################# à la probabilité sous l'hypothèse nulle de la somme observée de comptes.
+ et <- exactTest(y)
+ table(et$table$PValue < 0.01)
+ 
+ plotSmear(et, de.tags=de1tags12)
+#FALSE  TRUE 
+# 4414  9984 
+DEG_EdgeR=rownames(subset(et$table, PValue < 0.01))
+write.table(lcpm,"lcpm_f.txt",sep="\t", dec=".")
+write.table(DEG_EdgeR,"DEG_EdgeR_f.txt",sep="\t", dec=".")
+
+
+
+
+
+
+
+#######################################################################################################################
+
+lima 
+
+condition=factor(c(rep("TUMOR",486),rep("NORMAL",53)))
+design=model.matrix(~0+condition)
+voom_trans<-voom(RNA, design,span = 0.5, plot = TRUE,save.plot = TRUE )
+voom_matrix <- cbind(voom_trans$genes, voom_trans$E)
+write.table(voom_matrix,"voom_matrix_f.txt",sep="\t")
+fit <- lmFit(voom_trans, design = design)
+cont.matrix<-makeContrasts(contrast=c(-1,1),levels=design)
+fit<-contrasts.fit(fit,cont.matrix)
+efit <- eBayes(fit)
+head(efit$coeff)
+
+
+
+
+
+x11()
+plotSA(fit)
+# récupération des résultats
+results_voom=topTable(efit,coef="contrast",number=nrow(microarray),adjust="fdr",p.value=0.01)
+dim(results_voom)
+
+genes.voom<- rownames(results_voom)
+
+
+x11()
+venn(list(Limma= genes.Limma,SAM=gens.sam,voom=genes.voom) )
+######################## 											TDM					########################
+tcga_tdm = tdm_transform(ref_data = data.table(cbind(gene=rownames(microarray),microarray))
+	,target_data = data.table(cbind(gene=rownames(RNA), RNA)))
+summary(as.vector(data.matrix(tcga_tdm[,2:ncol(tcga_tdm),with=F])))
+
+#######################################################################################################
+###################################################################################################################################
+
+############################################## 				Microarray					 #################################################
+##########################################################################################################################################
+##########################################################################################################################################
+
+######################### Limma 
+
+
+
+
+design=model.matrix(~0+condition)
+fit <- lmFit(microarray, design = design)
+cont.matrix<-makeContrasts(contrast=c(-1,1),levels=design)
+fit<-contrasts.fit(fit,cont.matrix)
+efit <- eBayes(fit)
+head(efit$coeff)
+
+results_limma=topTable(efit,coef="contrast",number=nrow(microarray),adjust="fdr",p.value=0.01)
+dim(results_limma)
+#results_limma$threshold <- as.logical(results_limma$P.Val <0.01)
+genes.Limma<- rownames(results_limma)
+x11()
+venn(list(DESeq2 = DEG, voom = genes.voom,Limma_Microarray=genes.Limma) )
+
+
+
+
+
+####################### SAM
+#  les permutations permettent de définir une règle de décision 
+# (limite  à  partir  de  laquelle  les  expressions  des  gènes  sont  considérées  comme  différentes de 0) 
+# ainsi que d’estimer un taux de faux positifs (FDR = « False Discovery Rate» ) 
+condition=factor(c(rep("TUMOR",486),rep("NORMAL",53)))
+data_genes=list(x=microarray,y=as.numeric(condition), geneid=rownames(microarray),logged2=TRUE)
+samr.obj<-samr(data_genes,  resp.type="Two class unpaired", nperms=1000,random.seed=123)
+#La méthode SAM repose sur le choix d’une valeur de « delta »
+# Cette  valeur  définit  la limite  à  partir  de  laquelle l’expression  d’un  gène  est  considérée  comme différente  de  0. 
+# Pour choisir  une  valeur  de  delta pertinente,  il  faut regarder l’estimation du taux de faux positif (FDR)  associé
+#######
+## plus la valeur de  delta est grande, plus le tau x de FDR est faible
+
+delta.table<-samr.compute.delta.table(samr.obj,nvals=50)
+samr.plot(samr.obj,del=0)
+samr.plot(samr.obj,del=3)
+
+siggenes.table<- samr.compute.siggenes.table(samr.obj, del=3, data_genes, delta.table,all.genes=TRUE)
+siggenes.table_up=siggenes.table$genes.upDEG
+siggenes.table_lo=siggenes.table$genes.lo
+up<-siggenes.table$genes.up[as.numeric(siggenes.table$genes.up[,8])<1,]
+nrow(up)
+lo=siggenes.table$genes.lo[as.numeric(siggenes.table$genes.lo[,8])<1,]
+nrow(lo)  
+intersect(up[,3], lo[,3])
+genes_up=up[,3]
+genes_lo=lo[,3]
+DEG_sam=c(genes_up,genes_lo)
+save(genes_up,file="genes_up_SAMR.RData")
+save(genes_lo,file="genes_lo_SAMR.RData")
