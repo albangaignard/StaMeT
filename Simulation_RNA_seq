@@ -1,0 +1,157 @@
+list=ls()
+getwd()
+setwd( "Z:/Travail_Fadwa/Simulation")
+source("package_loader.R")
+
+load_it( c("MASS","vcd","impute","matrixStats","clusterSim","modeest","grid","survival","colorspace","RColorBrewer","scales","limma","reshape2",
+		"flexclust","fpc","plyr","corrplot","devtools","binr","gdata", "stringr",
+		"gridExtra","preprocessCore","cluster","ape","panp","affy","scales","affycoretools","DESeq2" ,"edgeR",
+		"RColorBrewer","preprocessCore", "panp","simpleaffy", "affycoretools","ade4",
+		"car","stats","gplots","TDM","samr","madsim","RTCGAToolbox","SimSeq","fdrtool","ssizeRNA"))
+###########################################################################################################################
+	
+
+
+	
+	
+		
+sim.counts <- function(nGenes , pi0, m, mu, disp,up=0.5, replace = TRUE){
+  arg <- list(nGenes = nGenes, pi0 = pi0,group = rep(c(1, 2), each = m))
+		
+  ## expected false positives
+  FP <- round(nGenes * pi0)
+  TP <- nGenes - FP 
+  
+  ## types of true positives
+  TP_up <- round(TP * up)
+  TP_down <- TP - TP_up 
+
+  de <- c( rep(1, TP_up), rep(-1, TP_down),rep(0, FP))
+  ########################################################
+  # Deux catégories pour les gènes up ∈[2,3]U[1.5,1.9]
+  # Deux catégories pour les gènes down ∈[1/3,1/2]U[1/1.9,1/1.5]
+  fc=c(runif(round(TP_up/2),2,3),runif(TP_up-round(TP_up/2),1.5,1.9),runif(round(TP_down/2),1/3,1/2),runif(TP_down-round(TP_down/2),1/1.9,1/1.5),rep(1,FP))
+
+  # h = vector indicating which pseudo-genes to re-simulate
+  h <- rep(TRUE, nGenes) 
+  counts <- matrix(0, nrow = nGenes, ncol = 2 * m)
+
+  
+  ## log fold change, approximately half positive, half negative
+  delta <- rep(0, nGenes)
+  if (is.function(fc)){
+    lfc <- log(fc(TP))
+  }else{
+    lfc <- log(fc)
+  }
+  delta[de != 0] <- lfc[lfc != 0]
+  
+  selected_genes <- true_means <- true_disps <- rep(0, nGenes)
+  left_genes <- 1:length(mu)
+  lambda <- phi <- matrix(0, nrow = nGenes, ncol = 2 * m)
+  
+  while(any(h)){
+    temp <- sample.int(length(left_genes), sum(h), replace)
+    temp <- temp[order(temp)]
+    selected_genes[h] <- left_genes[temp]
+    if (replace == FALSE){
+      left_genes <- left_genes[-temp]
+    }
+    
+    true_means[h] <- mu[selected_genes[h]]
+    true_disps[h] <- disp[selected_genes[h]]
+    
+    lambda[h,] <- matrix(true_means[h], ncol = 1) %*% 
+                  matrix(rep(1, 2 * m), nrow = 1) * 
+                  cbind(matrix(rep(1, sum(h) * m), ncol = m), 
+                        matrix(rep(exp(delta[h]), m), ncol = m))
+    ## mean of counts
+    
+    phi[h,] <- matrix(rep(true_disps[h], 2 * m), ncol = 2 * m)
+    ## dispersion of counts
+    
+    counts[h,] <- rnegbin(sum(h) * 2 * m, lambda[h,], 1 / phi[h,])
+    h <- (rowSums(cpm(counts) > 2) < 3)
+    # print(sum(h))
+  }
+  
+  if(any(rowSums(cpm(counts) > 2) < 3 ))
+    print("Error: Failed to simulate data: some genes are not expressed.")
+  rownames(counts)=c(paste("Gene up",1:TP_up),paste("Gene down",1:TP_down),paste("Gene" ,1:FP))
+  delta <- delta / log(2)
+  
+  list(counts = counts, 
+       group = arg$group, 
+       lambda0 = lambda[, 1],   # mean counts in control group
+       phi0 = phi[, 1],   # dispersion
+       de = de,   # DE indicator
+delta = delta # log2 fold change 
+)
+}
+
+########################################################################
+RNA_0<-read.table("RNA_count_tumor_samples.txt",
+		header=TRUE,sep="\t", dec=".",na.string=c("NA","?"),as.is=T)
+mu_0=apply(RNA_0,1,mean) # moyenne par genes
+sort(mu_0)[c((20502*0.4),(20502*0.6))]
+#628.2284 2261.6542 
+median(mu_0)
+#1323.892
+
+mu=runif(100,628,2262)
+# Estimation de la disperssion
+y <- DGEList(RNA_0)
+y <- calcNormFactors(y)
+y <- estimateDisp(y)
+disp<- y$tagwise.dispersion # disperssion par genes 
+
+sort(disp)[c((20502*0.4),(20502*0.6))]
+#0.2648772 0.5561206
+disp=runif(100,0.26,0.57)
+
+###################################################################################
+
+
+sim_rna=function(nGenes,n1,n2,pi0,mu, disp,up=0.5){
+		if(n1==n2){
+			m=n1
+			ech=1:(2*m)
+			sim <- sim.counts(nGenes ,pi0,m = m, mu = mu, disp = disp, up=up)
+		}
+
+		if(n1!=n2){
+			seed=50; 
+			set.seed(seed);
+			m <- max(n1,n2)  
+			ech=c(1:m,sample((m+1):(2*m),n2,replace=F))      
+			sim<- sim.counts(nGenes ,pi0,m = m, mu = mu, disp = disp, up=up)
+		}
+		return(list(RNA_sim_counts=sim,échantillon=ech,Sim_Counts=sim$counts[,ech] ))
+}	
+
+
+
+#
+		seed=50
+		set.seed(seed)
+		replace = TRUE
+		nGenes=10000
+		mu=runif(nGenes,628,2262)
+		disp=runif(nGenes,0.26,0.57)	
+		up=0.5
+		pi0=0.9	  ## proportion of non-differentially expressed genes
+		
+
+		
+		
+
+
+#########################################################################################
+getwd()
+setwd( "Z:/Travail_Fadwa/Simulation/Simulation finale")
+R_10<-sim_rna(nGenes=10000,n1=135,n2=15,pi0=0.9,mu, disp,up=0.5)
+saveRDS(R_10 ,file="Sim_RNA_counts_10p.RDS")
+R_25<-sim_rna(nGenes=10000,n1=112,n2=38,pi0=0.9,mu, disp,up=0.5)
+saveRDS(R_25 ,file="Sim_RNA_counts_25p.RDS")
+R_50<-sim_rna(nGenes=10000,n1=75,n2=75,pi0=0.9,mu, disp,up=0.5)
+saveRDS(R_50 ,file="Sim_RNA_counts_50p.RDS")
