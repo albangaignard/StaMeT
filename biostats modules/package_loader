@@ -1,5 +1,4 @@
-
-## cCette fonction permet de charger un vecteur de packeges ( vecteur de catactères )
+## Cette fonction permet de charger un vecteur de packeges ( vecteur de catactères )
 ## Des packeges CRAN et/ou Bioconductor 
 
 load_it = function(pack, update=FALSE) {
