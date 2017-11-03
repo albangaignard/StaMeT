@@ -1,0 +1,10 @@
+source("Repertoires.R")
+#setwd("C:/Users/f-benazzouz.PRET-P-N21645/Desktop/derniere Phase/biostats modules")
+source("initialisatin_param_simulation.R")
+
+args = c(nGenes,n1,n2,pi0,up,fc,"simulation")
+source("counts_data_simulator.R")
+args= c(nGenes,n1,n2,pi0,up,muminde1,muminde2,"simulation")
+source("microarray_simulator.R")
+args = c(data_simulation, data_normalisee,	output,	"Simulation")
+source("cross_platformes_script.R")
