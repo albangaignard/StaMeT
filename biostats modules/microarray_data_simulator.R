@@ -1,9 +1,9 @@
 
 
 
-
 args <- commandArgs(trailingOnly = TRUE)
 source("package_loader.R")
+source("Repertoires.R")
 load_it( c("MASS","edgeR"))
 
 nGenes=as.numeric(args[1])
@@ -12,9 +12,8 @@ n2=as.numeric(args[3])
 pi0=as.numeric(args[4])
 up=as.numeric(args[5])
 
-muminde1=as.numeric(args[6])
-muminde2=as.numeric(args[7])
-prefix=(args[8])
+
+
 
 
 
@@ -126,10 +125,16 @@ Simulation.microarray=function(nGenes,n1,n2, ratio=FALSE,pi0, up,  muminde1, mum
 }
 
 
-
+message("Voulez vous entrer les valeurs muminde1 et muminde2 ou prendre celles par défaut")
+m<-select.list(c("oui"," par défaut"))
+if( m=="oui"){
+muminde1=as.numeric(readline(" entrer la vecteurs muminde1 comprise entre 1.1 et 1.9: "))
+muminde2=as.numeric(readline(" entrer la vecteurs muminde2 comprise entre 0.2 et 0.9: "))
+} else{ muminde1=1.4
+		muminde2=0.8}
 
 
 Array_data<-Simulation.microarray( nGenes,n1,n2,ratio=FALSE,pi0, up,  muminde1, muminde2)
 Microarray<-Array_data$xdata
-write.table(Microarray,file=paste0(data_simulation,"Array_",prefix,"_pDE=",1-pi0,".txt"),sep="\t",row.names=T, col.names=T)
+write.table(Microarray,file=paste0(data_simulation,"Array_pDE=",1-pi0,".txt"),sep="\t",row.names=T, col.names=T)
 saveRDS(Array_data ,file="Array_data.RDS")
