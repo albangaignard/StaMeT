@@ -3,7 +3,6 @@
 
 
 
-
 args <- commandArgs(trailingOnly = TRUE)
 source("package_loader.R")
 load_it( c("MASS","edgeR"))
@@ -14,14 +13,10 @@ n1 = as.numeric(args[2])
 n2=as.numeric(args[3])
 pi0=as.numeric(args[4])
 up=as.numeric(args[5])
+fc=args[6]
+data_simulation=args[7]
 
 
-
-message("Voulez vous entrer le vecteur des FC ou prendre celui par défaut")		
-K<-select.list(c("fc","fc par défaut"))
-if( K=="fc"){
-fc=(readline("entrer un vecter FC: "))
-} else {fc="NULL"}
 
 
 counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){ 
