@@ -1,4 +1,3 @@
-
 CD C:\Users\f-benazzouz\Desktop\biostats modules
 
 "C:\Users\f-benazzouz\Documents\R\R-3.4.2\bin\R.exe" R --vanilla< Create_directories.R
@@ -14,4 +13,4 @@ CD C:\Users\f-benazzouz\Desktop\biostats modules
 
 
 
-"C:\Users\f-benazzouz\Documents\R\R-3.4.2\bin\R.exe" R --vanilla --args "simulation" "DESeq" "Zscor" 135 15 135 15 < Cross_plateformes.R
+"C:\Users\f-benazzouz\Documents\R\R-3.4.2\bin\R.exe" R --vanilla --args "simulation" "DESeq" "Zscor" 135 15 135 15 < Cross_plateform.R
