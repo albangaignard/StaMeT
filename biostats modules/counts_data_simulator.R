@@ -1,9 +1,8 @@
 
 
-
 suppressMessages(source("package_loader.R"))
 load_it( c("lattice","MASS","edgeR"))
-source("Repertoires.R")
+source("Directories.R")
 args <- commandArgs(trailingOnly = TRUE)
 nGenes=as.numeric(args[1])
 n1 = as.numeric(args[2])
@@ -116,13 +115,6 @@ counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){
 	
 }
 
-
-		 seed=50
-		set.seed(seed)
-		replace = TRUE
-	
-		mu=runif(nGenes,500,3000)
-		disp=rlnorm(nGenes,-1.13,1)
 
 
 #
