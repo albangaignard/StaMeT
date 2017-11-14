@@ -1,7 +1,6 @@
-
 suppressMessages(source("package_loader.R"))
 load_it( c("lattice","MASS","edgeR"))
-source("Repertoires.R")
+source("Directories.R")
 args <- commandArgs(trailingOnly = TRUE)
 nGenes=as.numeric(args[1])
 n1 = as.numeric(args[2])
