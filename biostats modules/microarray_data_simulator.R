@@ -1,5 +1,4 @@
 
-
 suppressMessages(source("package_loader.R"))
 load_it( c("lattice","MASS","edgeR"))
 source("Repertoires.R")
@@ -127,14 +126,6 @@ Simulation.microarray=function(nGenes,n1,n2, ratio=FALSE,pi0, up,  muminde1, mum
 	list(xdata = xdata, xid = xid, xsd = xsd,delta=LFC)
 }
 
-
-message("Voulez vous entrer les valeurs muminde1 et muminde2 ou prendre celles par défaut")
-m<-select.list(c("oui"," par défaut"))
-if( m=="oui"){
-muminde1=as.numeric(readline(" entrer la vecteurs muminde1 comprise entre 1.1 et 1.9: "))
-muminde2=as.numeric(readline(" entrer la vecteurs muminde2 comprise entre 0.2 et 0.9: "))
-} else{ muminde1=1.4
-		muminde2=0.8}
 
 
 Array_data<-Simulation.microarray( nGenes,n1,n2,ratio=FALSE,pi0, up,  muminde1, muminde2)
