@@ -1,4 +1,3 @@
-
 ############################ Cross plateformes
 
 suppressMessages(source("package_loader.R"))
@@ -94,6 +93,6 @@ Cross_platformes_normalisation=function(Microarray,RNA,Norm,St,Mn1,Mn2,Rn1,Rn2){
  RNA<-read.table(file=file.path(data_simulation,paste0("RNA_count_",prefix,".txt")),sep="\t")
 Microarray<-read.table(file=file.path(data_simulation,paste0("Array_",prefix,".txt")),sep="\t")
 
-Cross_platformes<-Cross_platformes_normalisation(Microarray,RNA,Norm,St,n1,n2,n1,n2)
+Cross_platformes<-Cross_platformes_normalisation(Microarray,RNA,Norm,St,Mn1,Mn2,Rn1,Rn2)
 
 write.table( Cross_platformes$Fusion,file=file.path(output,paste0("Fusion_",prefix,"_",Norm,"_",St,".txt")),sep="\t",row.names=T, col.names=T) 
