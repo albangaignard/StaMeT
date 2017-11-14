@@ -1,3 +1,5 @@
+# permet à l'utilisateur de charger tous les paquets souhaités, en les installant depuis  CRAN ou Bioconductor 
+# Prend comme entrée un vecteur de chaînes de caractères contenant des noms de paquets.
 
 
 load_it = function(pack, update=FALSE) {
