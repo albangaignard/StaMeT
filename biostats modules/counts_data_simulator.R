@@ -1,22 +1,25 @@
 
 
 
-
-
+suppressMessages(source("package_loader.R"))
+load_it( c("lattice","MASS","edgeR"))
+source("Repertoires.R")
 args <- commandArgs(trailingOnly = TRUE)
-source("package_loader.R")
-load_it( c("MASS","edgeR"))
-
-
 nGenes=as.numeric(args[1])
 n1 = as.numeric(args[2])
 n2=as.numeric(args[3])
 pi0=as.numeric(args[4])
 up=as.numeric(args[5])
-fc=args[6]
-data_simulation=args[7]
+vect_fc=args[6]
 
+    seed=50
+	set.seed(seed)
+	mu=runif(nGenes,500,3000)
+	disp=rlnorm(nGenes,-1.13,1)
+	replace=TRUE
 
+if ( !is.null(vect_fc)){
+fc=read.table(vect_fc)[,1]}
 
 
 counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){ 
@@ -52,21 +55,21 @@ counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){
 	
 	  ## Vérification du vecteur FC entré par l'utilisateur
 
-	  if(!is.null(fc)){
-	      if(length(fc)==nGenes) {
-			   if(all(fc[1: TP_up]>1.4) & all(fc[1: TP_up_up]>2.5)& all(fc[(TP_up_up+1):TP_up]<2.5) 
-			   &  all(fc[(TP_up+1):TP]>0.2) & all(fc[(TP_up+1):TP]<0.85)  & all(fc[(TP_up+1):(TP_up+TP_down_down)]<0.5)){
-			   lfc <- log(fc)
-			   delta[de != 0] <- lfc[de != 0]
-	          }else {
-	  		 message(" Erreur: le vecteur FC que vous avez entré ne respecte pas l ordre et la structure des données ou il n'a pas les bonnes dimensions ") 
-	  		 message(" Nous le remplaçons par un vecteur FC qui remplie ces conditions")
-				}}}
-				else{
-			  lfc <- log(FC)
-  			  delta[de != 0] <- lfc[de!= 0]
 	
-	  		}
+	  if(!is.null(fc)){
+		
+	     if((length(fc)==nGenes)& all(fc[1: TP_up]>1.4) & all(fc[1: TP_up_up]>2.5)& all(fc[(TP_up_up+1):TP_up]<2.5) &  all(fc[(TP_up+1):TP]>0.2) & all(fc[(TP_up+1):TP]<0.85)  & all(fc[(TP_up+1):(TP_up+TP_down_down)]<0.5)){
+     		lfc <- log(fc)
+		delta[de != 0] <- lfc[de != 0]
+	     }else{
+	 	message(" Le vecteur FC que vous avez entré ne respecte pas l ordre et la structure des données ou il n'a pas les bonnes dimensions ") 
+	  	message(" Nous le remplaçons par un vecteur FC qui remplie ces conditions")
+		lfc <- log(FC)
+  		delta[de != 0] <- lfc[de!= 0]
+		}}else{
+ 			lfc <- log(FC)
+  			delta[de != 0] <- lfc[de!= 0]
+	  }
 
 	   
 #//.......................................................................................................//##
@@ -126,9 +129,9 @@ counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){
 
 
 
-RNAseq_counts<-counts.simulation (nGenes, n1,n2,pi0, mu, disp,up,replace,fc)
+RNAseq_counts<-counts.simulation(nGenes, n1,n2,pi0,up,fc)
 counts=RNAseq_counts$counts
-write.table(counts,file=paste0(data_simulation,"RNA_count_",prefix,"_pDE=",1-pi0,".txt"),sep="\t",row.names=T, col.names=T)
-saveRDS(RNAseq_counts,file="RNAseq_counts.RDS")
+write.table(counts, file=file.path(data_simulation,"RNA_count_simulation.txt"),sep="\t",row.names=T, col.names=T)
+
 
 
