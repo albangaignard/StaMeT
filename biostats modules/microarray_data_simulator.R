@@ -1,17 +1,20 @@
 
 
-
-args <- commandArgs(trailingOnly = TRUE)
-source("package_loader.R")
+suppressMessages(source("package_loader.R"))
+load_it( c("lattice","MASS","edgeR"))
 source("Repertoires.R")
-load_it( c("MASS","edgeR"))
-
+args <- commandArgs(trailingOnly = TRUE)
 nGenes=as.numeric(args[1])
 n1 = as.numeric(args[2])
 n2=as.numeric(args[3])
 pi0=as.numeric(args[4])
 up=as.numeric(args[5])
+muminde1=as.numeric(args[6]);
+muminde2=as.numeric(args[7]);
 
+
+if(is.null(muminde1)){ muminde1=1.4}
+if(is.null(muminde2)){ muminde1=0.8}
 
 
 
@@ -136,5 +139,5 @@ muminde2=as.numeric(readline(" entrer la vecteurs muminde2 comprise entre 0.2 et
 
 Array_data<-Simulation.microarray( nGenes,n1,n2,ratio=FALSE,pi0, up,  muminde1, muminde2)
 Microarray<-Array_data$xdata
-write.table(Microarray,file=paste0(data_simulation,"Array_pDE=",1-pi0,".txt"),sep="\t",row.names=T, col.names=T)
-saveRDS(Array_data ,file="Array_data.RDS")
+
+write.table(Microarray,file=file.path(data_simulation,"Array_simulation.txt"),sep="\t",row.names=T, col.names=T)
