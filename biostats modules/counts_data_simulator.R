@@ -1,5 +1,4 @@
 
-
 suppressMessages(source("package_loader.R"))
 load_it( c("lattice","MASS","edgeR"))
 source("Directories.R")
@@ -21,7 +20,7 @@ if ( !is.null(vect_fc)){
 fc=read.table(vect_fc)[,1]}
 
 
-counts.simulation<- function(nGenes, n1,n2,pi0, mu, disp,up,replace ,fc){ 
+counts.simulation<- function(nGenes, n1,n2,pi0,up ,fc){ 
 									
 	  ## Nombre des Faux positifs 																			
 	  FP <- round(nGenes * pi0) 																			
