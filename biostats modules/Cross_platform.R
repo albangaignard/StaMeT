@@ -74,7 +74,7 @@ Cross_platformes_normalisation=function(Microarray,RNA,Norm,St,Mn1,Mn2,Rn1,Rn2){
 		## Choix de la normalisation des données RNA seq
 		R_Norm<-Normalization(counts,Rn1,Rn2,Norm)
 		Design=R_Norm[[1]]
-		save(R_Norm,file=paste0(data_normalisation,paste0("RNA_",prefix,"_",Norm,"normalisation.txt")))
+		save(R_Norm[[2]],file=paste0(data_normalisation,paste0("RNA_",prefix,"_",Norm,"normalisation.txt")))
 		## Récupération de la matrice des comptages normalisée et standarisée
 		R<-Standarisation(microarrays,R_Norm$normalized_data,St)
 		## Récupération de la matrice des ratio  log intensité standarisée
