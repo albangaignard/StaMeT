@@ -1,0 +1,50 @@
+<tool id="RNAseq_Sim" name="RNAseq_Sim" version="0.1.0">
+  <description>RNAseq data simulation tool</description>
+
+<edam_topics>
+    <edam_topic>topic_2269</edam_topic>
+</edam_topics>
+
+<edam_operations>
+    <edam_operation>operation_3434</edam_operation>
+</edam_operations>
+
+  <command interpreter="Rscript">
+    main.R 
+      -gene_number $gene_number 
+      -samples_n1 $samples_n1
+      -samples_n2 $samples_n2
+      -up_ratio $up_ratio
+      -signifcative_pvalue_ratio $pvalue_ratio
+      -rnaseq_norm $rnaseq_norm
+      > $out
+  </command>
+  <inputs>
+    <param name="gene_number" type="integer" value="10000" label="Number of genes" help="help message"/>
+    <param name="samples_n1" type="integer" value="135" label="Condition 1 sample number" help="help message"/>
+    <param name="samples_n2" type="integer" value="15" label="Condition 2 sample number" help="help message"/>
+    <param name="up_ratio" type="float" value="0.45" label="ratio of UP genes" help="help message"/>
+    <param name="pvalue_ratio" type="float" value="0.1" label="ratio of significative p-values" help="help message"/>
+    <param name="rnaseq_norm" type="select" value="voom" label="normalization method" help="help message"> 
+          <option value="deseq2">deseq2</option>
+          <option value="voom">VOOM</option>
+          <option value="EdgeR">EdgeR</option>
+    </param>
+    <!--<param name="fold_change" type="data" format="tabular" label="fold change data" help="help message"/>-->
+  </inputs>
+  <outputs>
+    <data format="txt" name="out" />
+  </outputs>
+
+  <tests>
+    <test>
+      <param name="input" value="fa_gc_content_input.fa"/>
+      <output name="out_file1" file="fa_gc_content_output.txt"/>
+    </test>
+  </tests>
+
+  <help>
+
+  </help>
+
+</tool>

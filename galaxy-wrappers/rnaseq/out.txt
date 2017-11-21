@@ -1,0 +1,4 @@
+WARNING: unknown gui '10000', using none
+
+RNAseq simulation tool 
+-gene_number 10000 -samples_n1 10 -samples_n2 12 -up_ratio 0.5 -signifcative_pvalue_ratio 0.1 [-fc fold_change.txt] [-rnaseq_norm deseq2] 
