@@ -18,7 +18,9 @@ option_list = list(
 	make_option(c("-m1", "--m1"), type="numeric", default=1.4, 
               help="average difference between global mean and phenotype mean for highly differentially expressed genes [default: %default]"),			  
 	make_option(c("-m2", "--m2"), type="numeric", default=0.8, 
-              help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default: %default]")		
+              help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default: %default]"),
+    make_option(c("-s", "--seed"), type="numeric", default=17, 
+              help="Seed value: can be set to make the simulation reproducible. [default: %default]")		
 )
 
 arg_parser = OptionParser(option_list=option_list)
