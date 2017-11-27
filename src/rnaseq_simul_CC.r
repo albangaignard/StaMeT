@@ -107,7 +107,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=17){
 
 
 RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
-                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE], seed=myseed)
+                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE], seed=les_args$seed)
 counts=RNAseq_counts$counts
 
 
