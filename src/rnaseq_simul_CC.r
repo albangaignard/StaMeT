@@ -20,7 +20,7 @@ option_list = list(
               help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details. [default: %default]"),			  
 	make_option(c("-rseq_n", "--rnaseq_norm"), type="character", default="DESeq2", 
               help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default: %default]"),
-    make_option(c("-s", "--seed"), type="numeric", default=17, 
+    make_option(c("-s", "--seed"), type="numeric", default=NULL, 
               help="Seed value: can be set to make the simulation reproducible. [default: %default]")
 )
 
@@ -32,9 +32,11 @@ if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-p
 library(MASS)
 library(edgeR)
 
-counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=17){ 
+counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){ 
 									
-	# set.seed(seed) # possibilité plus tard d'ajouter un seed pour l'utilisateur, pour avoir des fichiers repoductibles
+	## si un seed a été entré, on le fixe
+    if(!is.null(seed)) set.seed(seed)
+	
 	## moyenne et dispersion
 	mu <- runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
 	replace <- TRUE			
