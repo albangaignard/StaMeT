@@ -1,9 +1,8 @@
-
 # Script simulateur RNA-Seq
 
+if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cloud.r-project.org/")
+
 library(optparse)
-library(MASS)
-library(edgeR)
 
 option_list = list(
     make_option(c("-gn", "--gene_number"), type="numeric", default=10000, 
@@ -25,6 +24,9 @@ option_list = list(
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
+
+library(MASS)
+library(edgeR)
 
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc){ 
 									
@@ -51,7 +53,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc){
 	  delta <- rep(0, nGenes)
 	 	
 	if ( is.null(fc)){
- 	## choix du FC par défaut
+ 	## choix du FC par dfaut
 	seed=1234
 	set.seed(seed)
 		if (TP_up_up==0){
@@ -67,7 +69,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc){
 	delta[DE != 0] <-log(FC)[DE != 0]
 	}else{
 	fc_u=read.table(fc)[,1]
-	# Vérifier qu'il n'y a pas de NA 
+	# Vrifier qu'il n'y a pas de NA 
 	# si c'est les remplacer par 2 pour les up et 0.5 pour les down
 	if(all(is.na(fc_u))=="FALSE"){
 	pos=which(is.na(fc_u))
@@ -127,7 +129,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc){
 
 	  }
 	  if(any(rowSums(cpm(counts) > 2) < n1 ))
-		print("Erreur: Impossible de simuler des données: certains gènes ne sont pas exprimés.")
+		print("Erreur: Impossible de simuler des donnes: certains gnes ne sont pas exprims.")
 	  rownames(counts)=c(paste("Gene.up",1:TP_up),paste("Gene.down",1:TP_down),paste("Gene" ,1:FP))
 	  delta <- delta / log(2)
 	  
@@ -152,13 +154,11 @@ counts=RNAseq_counts$counts
 
 # NORM
 
-library("MASS")
 library("DESeq2")
-library("edgeR")
 library("limma")
  
 Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2, Norm=c("DESeq2", "edgeR", "VOOM")){
-        ## Vérifier que n1 et n2 soient supérieurs à 0
+        ## Vrifier que n1 et n2 soient suprieurs  0
 	## si ce n'est pas le cas, on va mettre un design: ~1
   if( (n1>0)&(n2>0)){
 	
