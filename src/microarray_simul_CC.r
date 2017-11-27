@@ -1,5 +1,6 @@
-
 # Script simulateur microarray
+
+if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cran.univ-paris2.fr")
 
 library(optparse)
 
@@ -25,7 +26,7 @@ les_args = parse_args(arg_parser)
 
 
 Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE){
-## Initialisation des paramËtres
+## Initialisation des param√®tres
 	  shape2 = 4; lb = 4; ub = 14; lambda1 = 0.13; sdde = 0.5;sdn = 0.4;N=n1+n2+1;lambda2=4; 
 
 	  ## Nombre des Faux positifs 																			
@@ -35,50 +36,50 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	  ## types des TP ( up & down)																		
 	  TP_up <- round(TP * up)
 	  TP_down <- TP - TP_up 
-	  ## TP avec des LFC ÈlevÈs en valeur absolue
+	  ## TP avec des LFC √©lev√©s en valeur absolue
 	  TP_up_up=round((TP_up/2))
 	  TP_down_down=round((TP_down/2))
-		## simulation de n valeurs selon la loi bÍta, une par gËne, d'o˘ dÈcouleront ensuite les valeurs pour les diffÈrents patients.
+		## simulation de n valeurs selon la loi b√™ta, une par g√®ne, d'o√π d√©couleront ensuite les valeurs pour les diff√©rents patients.
         x <- rbeta(nGenes, 2, shape2) 
-		## mise ‡ l'Èchelle (de lb ‡ (lb+ub)): 
-		## On transforme ces valeurs pour correspondre aux donnÈes rÈelles variant entre la borne infÈrieure  lb=4 et la borne supÈrieure ub=14. x2=lb+ub*x.
-		## Ces valeurs reprÈsentent le niveau díexpression moyen pour les n gËnes.
+		## mise √† l'√©chelle (de lb √† (lb+ub)): 
+		## On transforme ces valeurs pour correspondre aux donn√©es r√©elles variant entre la borne inf√©rieure  lb=4 et la borne sup√©rieure ub=14. x2=lb+ub*x.
+		## Ces valeurs repr√©sentent le niveau d‚Äôexpression moyen pour les n g√®nes.
         x2 <- lb + (ub * x) 
-		## initialisation de la matrice avec la bonne taille (ou 1 de trop pour l'Èch ref si on est pas en ratio)
+		## initialisation de la matrice avec la bonne taille (ou 1 de trop pour l'√©ch ref si on est pas en ratio)
     	xdat <- matrix(c(rep(0, nGenes * N)), ncol = N) 
-		## "id" des gËnes, initialisÈes ‡ 0 pour tous => pour rÈcupÈrer info up/down/non de ensuite
+		## "id" des g√®nes, initialis√©es √† 0 pour tous => pour r√©cup√©rer info up/down/non de ensuite
 		xid <- matrix(c( rep(1, TP_up), rep(-1, TP_down),rep(0, FP)), ncol = 1)		
 		LFC <- matrix(c(rep(0, nGenes)), ncol = 1) 
-		## on fait une boucle sur les gËnes
+		## on fait une boucle sur les g√®nes
 		for (i in 1:nGenes) {
 			alpha <- lambda1 * exp(-lambda1 * x2[i]) 
-			## x2[i] contient la valeur "ÈchantillonnÈe" pour le gËne i; on gÈnËre alÈatoirement N valeurs depuis la loi uniforme (cf algo)
-			## Pour chaque valeur de x2, on gÈnËre N valeurs uniformÈment rÈparties sur un intervalle centrÈ
+			## x2[i] contient la valeur "√©chantillonn√©e" pour le g√®ne i; on g√©n√®re al√©atoirement N valeurs depuis la loi uniforme (cf algo)
+			## Pour chaque valeur de x2, on g√©n√®re N valeurs uniform√©ment r√©parties sur un intervalle centr√©
 			xi_val <- runif(N, min = (1 - alpha) * x2[i], max = (1 + alpha) * x2[i]) 
-			## Si le gËne n'est pas DE
+			## Si le g√®ne n'est pas DE
 			if (i > TP) { 
             xdat[i, ] <- xi_val 
 			LFC[i,]=0
-			} else {	## si le gËne DE
-				## on garde les (n1+1) premiËres valeurs, qui reflËtent les valeurs dans des conditions "normales"/ premiËre condition
+			} else {	## si le g√®ne DE
+				## on garde les (n1+1) premi√®res valeurs, qui refl√®tent les valeurs dans des conditions "normales"/ premi√®re condition
 				xi1 <- xi_val[1:(n1 + 1)] 
 				## on tire au sort la diff de moyenne, selon muminde et lambda2
 				 if(( i<(TP_up_up+1)) | ((i>TP_up)&(i<TP_up+TP_down_down+1))) {
 
 				mude <- muminde1 + rexp(1, lambda2) 
-				## on tire au sort si gËne up ou down, up pour le if, down pour le else
+				## on tire au sort si g√®ne up ou down, up pour le if, down pour le else
 				if (i <= TP_up_up) { 
 				fc<-rnorm(n2, mean = mude, sd = sdde)
 				LFC[i,]<-mean(fc)
-				## on ajoute la partie "up", distribuÈe selon loi N autour de mude avec toujours la mÍme dispersion sdde
+				## on ajoute la partie "up", distribu√©e selon loi N autour de mude avec toujours la m√™me dispersion sdde
                 xi2 <- xi_val[(n1 + 2):N] + fc 
-                xid[i] <- 1 # le gËne est up
+                xid[i] <- 1 # le g√®ne est up
 				} else {
 					fc<-rnorm(n2, mean = mude, sd = sdde)
 					LFC[i,]<-mean(fc)
 					## idem que pour les up mais on retranche pour les down
 					xi2 <- xi_val[(n1 + 2):N] - fc 
-					# gËne est down
+					# g√®ne est down
 					xid[i] <- -1 
 				}
 		
@@ -87,19 +88,19 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 			} else {
 			
 			mude <- muminde2 + rexp(1, lambda2) 
-				## on tire au sort si gËne up ou down, up pour le if, down pour le else
+				## on tire au sort si g√®ne up ou down, up pour le if, down pour le else
 				if ((i >TP_up_up)&(i<=TP_up)) { 
 				fc<-rnorm(n2, mean = mude, sd = sdde)
 				LFC[i,]<-mean(fc)
-				## on ajoute la partie "up", distribuÈe selon loi N autour de mude avec toujours la mÍme dispersion sdde
+				## on ajoute la partie "up", distribu√©e selon loi N autour de mude avec toujours la m√™me dispersion sdde
                 xi2 <- xi_val[(n1 + 2):N] + fc 
-                xid[i] <- 1 # le gËne est up
+                xid[i] <- 1 # le g√®ne est up
 				} else {
 					fc<-rnorm(n2, mean = mude, sd = sdde)
 					LFC[i,]<-mean(fc)
 					## idem que pour les up mais on retranche pour les down
 					xi2 <- xi_val[(n1 + 2):N] - fc 
-					# gËne est down
+					# g√®ne est down
 					xid[i] <- -1 
 				}}
 	            xdat[i, ] <- c(xi1, xi2)
@@ -113,14 +114,14 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	rownames(xdat) <- c(paste("Gene.up", 1:TP_up), paste("Gene.down", 1:TP_down), paste("Gene" , 1:FP))
 	## sd de la 1e colonne = "individu" ref pour les ratios
     xsd <- sd(xdat[, 1]) 
-	## si sd est strictement positif, on utilise cette valeur pour recrÈer une matrice de la mÍme taille que xdat, de moyenne 0 et sd=xsd (pour faire le bruit additif)
+	## si sd est strictement positif, on utilise cette valeur pour recr√©er une matrice de la m√™me taille que xdat, de moyenne 0 et sd=xsd (pour faire le bruit additif)
     if (sdn > 0) { 
         ndat <- matrix(c(rnorm(nGenes * N, mean = 0, sd = sdn)), ncol = N)
 		## On ajoute du bruit additif       
 	   xdat <- xdat + ndat 
     }
 	
-	## si on est en simulation de ratio, on retranche la ref (correspond ‡ un ratio car on simule donnÈes en log)
+	## si on est en simulation de ratio, on retranche la ref (correspond √† un ratio car on simule donn√©es en log)
     if (ratio) { 
         xdata <- xdat[, 2:N] - xdat[, 1]
     } else { # sinon on supprime la 1e colonne
