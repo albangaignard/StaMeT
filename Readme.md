@@ -1,0 +1,19 @@
+# Multi-transcripts toolbox
+
+## Description
+...
+
+## Motivations
+...
+
+## Usage in command line
+...
+
+## Usage in R scripts
+...
+
+## Deployment and usage in Galaxy workflows
+...
+
+## Software dependencies
+...
