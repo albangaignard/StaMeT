@@ -32,8 +32,8 @@ library(edgeR)
 
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){ 
 									
-	set.seed(seed)
-	## mouyenne et dispersion
+	# set.seed(seed) # possibilité plus tard d'ajouter un seed pour l'utilisateur, pour avoir des fichiers repoductibles
+	## moyenne et dispersion
 	mu=runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
 	replace=TRUE			
 	## Nombre des Faux positifs 																			
@@ -43,43 +43,20 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 	## types des TP (up & down)																		
 	TP_up <- round(TP * up)
 	TP_down <- TP - TP_up 
-	## TP avec des LFC élevés en valeur absolue
-	TP_up_up=round((TP_up/2))
-	TP_down_down=round((TP_down/2))
-	
+
 	## vecteur des DE: 1 pour les gènes Up, -1 pour les gènes down et 0 pour les gènes non DE
-	DE <- c( rep(1, TP_up), rep(-1, TP_down),rep(0, FP))
+	DE <- c(rep(1, TP_up), rep(-1, TP_down), rep(0, FP))
 
     ## LFC, environ moitié positif, moitié négatif (pour les gènes différentiellement exprimés (DE))
 	delta <- rep(0, nGenes)
 	 	
-	if ( is.null(fc)){
- 	## choix du FC par dfaut
-	seed=1234
-	set.seed(seed)
-		if (TP_up_up==0){
-			FC=c(sort(rnorm(TP_up, 1.4, 0.2), decreasing = TRUE),
-			sort(rnorm(TP_down, -1.4, 0.2), decreasing = FALSE), rep(0,FP))
-		}else{
-			FC=c(sort(rnorm(TP_up, 1.4, 0.2), decreasing = TRUE)[1:TP_up_up],
-			sort(rnorm(TP_up,0.6,0.3), decreasing = TRUE)[1:(TP_up-TP_up_up)],
-			sort(rnorm(TP_down,-1.4,0.2), decreasing = FALSE)[1:TP_down_down],
-			sort(rnorm(TP_down,-0.6,0.3), decreasing = FALSE)[1:(TP_down-TP_down_down)], rep(0,FP))
-		}
-	FC=exp(FC*log(2))
-	delta[DE != 0] <-log(FC)[DE != 0]
-	}else{
-	fc_u=read.table(fc)[, 1]
 	# Verifier qu'il n'y a pas de NA 
-	# si c'est les remplacer par 2 pour les up et 0.5 pour les down
-	if(all(is.na(fc_u))=="FALSE"){
-	pos=which(is.na(fc_u))
-	for(i in 1:length(pos)){
-		if(pos[i]<TP_up){fc_u[pos[i]]=2}else{fc_u[pos[i]]=0.5}
-	}
+	# sinon, on sort de la fonction avec message d'erreur
+	if(any(is.na(fc))) {message("NA are not allowed in fc_file.") ; return()}
 
- 		if((length(fc_u)==TP)& all(fc_u[1: TP_up]>1) & all(fc_u[(TP_up+1):TP]<1)){
-     		lfc <- log(fc_u)
+
+ 		if((length(fc)==TP)& all(fc[1: TP_up]>1) & all(fc[(TP_up+1):TP]<1)){
+     		lfc <- log(fc)
 		delta[DE != 0] <- lfc[DE != 0]
 		}else{ 
 			message("Error: Vector FC is in discordance with parameters pi0 and up:")
@@ -95,9 +72,9 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 	  ## h = vector indicating which pseudo-genes to re-simulate,0
 	  h <- rep(TRUE, nGenes) 
 	  counts <- matrix(0, nrow = nGenes, ncol = n1+n2) 
-		  selected_genes <- true_means <- true_disps <- rep(0, nGenes)
+	  selected_genes <- true_means <- true_disps <- rep(0, nGenes)
 	  left_genes <- 1:length(mu)
-	  lambda <- phi <- matrix(0, nrow = nGenes, ncol =n1+n2 )
+	  lambda <- phi <- matrix(0, nrow=nGenes, ncol=n1+n2)
 	  
 	  while(any(h)){
 		temp <- sample.int(length(left_genes), sum(h), replace)
@@ -118,9 +95,9 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 		## moyenne des comptages
 		
 		phi[h,] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
-		## disperssion des comptages
+		## dispersion des comptages
 		
-		counts[h,] <- rnegbin(sum(h) * (n1+n2), lambda[h,], 1 / phi[h,])
+		counts[h,] <- rnegbin(sum(h) * (n1+n2), lambda[h, ], 1 / phi[h, ])
 		h <- (rowSums(cpm(counts) > 2) < n1)
 
 	  }
@@ -135,15 +112,9 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 
 
 
-		  
-	
-
-
-
-RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t"))
+RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
+                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE])
 counts=RNAseq_counts$counts
-
-
 
 
 # NORM
