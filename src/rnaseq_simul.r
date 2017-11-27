@@ -151,6 +151,6 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 
 Norm_count <- Normalization(counts, Norm=les_args$rnaseq_norm)
 
-write.table(data.frame(Gene=row.names(Norm_count), Norm_count), file="MicroArray_simulation.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
+write.table(data.frame(Gene=row.names(Norm_count), Norm_count), file="RNAseq_simulation.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
 
 
