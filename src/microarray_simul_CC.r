@@ -1,6 +1,6 @@
 # Script simulateur microarray
 
-if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cran.univ-paris2.fr")
+if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cloud.r-project.org/")
 
 library(optparse)
 
@@ -18,7 +18,7 @@ option_list = list(
 	make_option(c("-m1", "--m1"), type="numeric", default=1.4, 
               help="average difference between global mean and phenotype mean for highly differentially expressed genes [default: %default]"),			  
 	make_option(c("-m2", "--m2"), type="numeric", default=0.8, 
-              help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default: %default]"),		
+              help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default: %default]")		
 )
 
 arg_parser = OptionParser(option_list=option_list)
