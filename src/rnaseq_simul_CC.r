@@ -19,7 +19,9 @@ option_list = list(
 	make_option(c("-fc", "--fc_file"), type="character", default="FC.txt", 
               help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details. [default: %default]"),			  
 	make_option(c("-rseq_n", "--rnaseq_norm"), type="character", default="DESeq2", 
-              help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default: %default]")		
+              help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default: %default]"),
+    make_option(c("-s", "--seed"), type="numeric", default=17, 
+              help="Seed value: can be set to make the simulation reproducible. [default: %default]")
 )
 
 arg_parser = OptionParser(option_list=option_list)
@@ -30,12 +32,12 @@ if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-p
 library(MASS)
 library(edgeR)
 
-counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){ 
+counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=17){ 
 									
 	# set.seed(seed) # possibilité plus tard d'ajouter un seed pour l'utilisateur, pour avoir des fichiers repoductibles
 	## moyenne et dispersion
-	mu=runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
-	replace=TRUE			
+	mu <- runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
+	replace <- TRUE			
 	## Nombre des Faux positifs 																			
 	FP <- round(nGenes * pi0) 																			
 	## Nombre des vrais positifs																			
@@ -54,33 +56,30 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 	# sinon, on sort de la fonction avec message d'erreur
 	if(any(is.na(fc))) {message("NA are not allowed in fc_file.") ; return()}
 
-
- 		if((length(fc)==TP)& all(fc[1: TP_up]>1) & all(fc[(TP_up+1):TP]<1)){
-     		lfc <- log(fc)
+	if((length(fc)==TP) & all(fc[1:TP_up]>1) & all(fc[(TP_up+1):TP]<1)){
+     	lfc <- log(fc)
 		delta[DE != 0] <- lfc[DE != 0]
-		}else{ 
-			message("Error: Vector FC is in discordance with parameters pi0 and up:")
-			message("---The size of vector FC must be equal to: ", TP)
-			message("---The first ", TP_up, " values must be strictly greater than 1")
-			message("---The following ", TP_down, " values must be strictly less than 1")
-			message("---A default FC file is available when no value is given for fc_file parameter.")
-		 	return()
-
-		}
+	}else{ 
+		message("Error: Vector FC is in discordance with parameters pi0 and up:")
+		message("---The size of vector FC must be equal to: ", TP)
+		message("---The first ", TP_up, " values must be strictly greater than 1")
+		message("---The following ", TP_down, " values must be strictly less than 1")
+		message("---A default FC file is available when no value is given for fc_file parameter.")
+		return()
 	}
 
-	  ## h = vector indicating which pseudo-genes to re-simulate,0
-	  h <- rep(TRUE, nGenes) 
-	  counts <- matrix(0, nrow = nGenes, ncol = n1+n2) 
-	  selected_genes <- true_means <- true_disps <- rep(0, nGenes)
-	  left_genes <- 1:length(mu)
-	  lambda <- phi <- matrix(0, nrow=nGenes, ncol=n1+n2)
+	 # initialisation
+	 h <- rep(TRUE, nGenes) 
+	 counts <- matrix(0, nrow = nGenes, ncol = n1+n2) 
+	 selected_genes <- true_means <- true_disps <- rep(0, nGenes)
+	 left_genes <- 1:length(mu)
+	 lambda <- phi <- matrix(0, nrow=nGenes, ncol=n1+n2)
 	  
-	  while(any(h)){
+	while(any(h)){
 		temp <- sample.int(length(left_genes), sum(h), replace)
 		temp <- temp[order(temp)]
 		selected_genes[h] <- left_genes[temp]
-		if (replace == FALSE){
+		if (!replace){
 		  left_genes <- left_genes[-temp]
 		}
 		
@@ -93,18 +92,13 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 							matrix(rep(exp(delta[h]), n2), ncol = n2))
 		
 		## moyenne des comptages
-		
-		phi[h,] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
+		phi[h, ] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
 		## dispersion des comptages
-		
-		counts[h,] <- rnegbin(sum(h) * (n1+n2), lambda[h, ], 1 / phi[h, ])
-		h <- (rowSums(cpm(counts) > 2) < n1)
-
-	  }
-	  if(any(rowSums(cpm(counts) > 2) < n1 ))
-		print("Erreur: Impossible de simuler des donnes: certains gnes ne sont pas exprims.")
-	  rownames(counts)=c(paste("Gene.up",1:TP_up),paste("Gene.down",1:TP_down),paste("Gene" ,1:FP))
-	  delta <- delta / log(2)
+		counts[h, ] <- rnegbin(sum(h) * (n1+n2), lambda[h, ], 1/phi[h, ])
+	}
+	  
+	  rownames(counts) <- c(paste("Gene.up", 1:TP_up), paste("Gene.down", 1:TP_down), paste("Gene", 1:FP))
+	  delta <- delta/log(2)
 	  
 	colnames(counts)=c(paste("cond1", 1:n1, sep="_"), paste("cond2", 1:n2, sep="_"))
 	list(counts = counts, DE=DE)
@@ -113,7 +107,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 
 
 RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
-                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE])
+                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE], seed=myseed)
 counts=RNAseq_counts$counts
 
 
@@ -124,12 +118,13 @@ library("DESeq2")
 library("limma")
  
 Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2, Norm=c("DESeq2", "edgeR", "VOOM")){
-        ## Vrifier que n1 et n2 soient suprieurs  0
+    ## Verifier que n1 et n2 soient suprieurs 0
 	## si ce n'est pas le cas, on va mettre un design: ~1
-  if( (n1>0)&(n2>0)){
-	
-	condition <- factor(rep(paste0("Cond", 1:2), c(n1, n2)))
-	} else{ condition<-rep(1,ncol(counts))}
+    if(n1 & n2){
+    	condition <- factor(rep(paste0("Cond", 1:2), c(n1, n2)))
+	} else {
+	    condition <- rep(1, n1+n2)
+	}
 	
 	# normalisation
 	switch(Norm,
