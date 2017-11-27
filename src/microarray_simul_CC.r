@@ -27,9 +27,12 @@ arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
 
-Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE){
+Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE, seed=NULL){
 ## Initialisation des paramètres
-	  shape2 = 4; lb = 4; ub = 14; lambda1 = 0.13; sdde = 0.5;sdn = 0.4;N=n1+n2+1;lambda2=4; 
+	  shape2 = 4; lb = 4; ub = 14; lambda1 = 0.13; sdde = 0.5; sdn = 0.4; N=n1+n2+1; lambda2=4
+
+      ## si un seed a été entré, on le fixe
+      if(!is.null(seed)) set.seed(seed)
 
 	  ## Nombre des Faux positifs 																			
 	  FP <- round(nGenes * pi0) 																			
@@ -133,7 +136,7 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	list(xdata=xdata, xid=xid, xsd=xsd, delta=LFC)
 }
 
-Array_data <- Simulation.microarray(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, muminde1=les_args$m1, muminde2=les_args$m2)
+Array_data <- Simulation.microarray(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, muminde1=les_args$m1, muminde2=les_args$m2, seed=les_args$seed)
 
 write.table(data.frame(Gene=row.names(Array_data$xdata), Array_data$xdata), file="MicroArray_simulation.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
 
