@@ -1,6 +1,7 @@
 # Script simulateur microarray
 
-if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cloud.r-project.org/")
+pack_dispo <- row.names(installed.packages())
+if(! "optparse" %in% pack_dispo) install.packages("optparse", repos="https://cloud.r-project.org/")
 
 library(optparse)
 
