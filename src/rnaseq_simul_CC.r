@@ -76,13 +76,13 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 		if(pos[i]<TP_up){fc_u[pos[i]]=2}else{fc_u[pos[i]]=0.5}
 	}
 
- 		if((length(fc_u)==TP)& all(fc_u[1: TP_up]>=1.1) & all(fc_u[(TP_up+1):TP]<1)){
+ 		if((length(fc_u)==TP)& all(fc_u[1: TP_up]>1) & all(fc_u[(TP_up+1):TP]<1)){
      		lfc <- log(fc_u)
 		delta[DE != 0] <- lfc[DE != 0]
 		}else{ 
 			 message("Error: Vector FC used does not have the right size or it does not respect the data structure")
 			message("---The size of vector FC must be equal to: ", TP)
-			message("---The fisrt ",TP_up, " values must be greater than 1.2")
+			message("---The fisrt ",TP_up, " values must be greater than 1")
 			message("---The second ",TP_down, " values must be less than 1")
 			message("---To use the default vector of FC, put fc=NULL")
 		 	return()
