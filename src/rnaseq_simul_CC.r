@@ -1,6 +1,7 @@
 # Script simulateur RNA-Seq
 
-if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cloud.r-project.org/")
+pack_dispo <- row.names(installed.packages())
+if(! "optparse" %in% pack_dispo) install.packages("optparse", repos="https://cloud.r-project.org/")
 
 library(optparse)
 
@@ -24,7 +25,8 @@ option_list = list(
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
-
+if(! "MASS" %in% pack_dispo) install.packages("MASS", repos="https://cloud.r-project.org/")
+if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
 library(MASS)
 library(edgeR)
 
@@ -32,43 +34,43 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 									
 	set.seed(seed)
 	## mouyenne et dispersion
-	mu=runif(nGenes,500,3000);disp=rlnorm(nGenes,-1.13,1)
+	mu=runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
 	replace=TRUE			
-	  ## Nombre des Faux positifs 																			
-	  FP <- round(nGenes * pi0) 																			
-	  ## Nombre des vrais positifs																			
-	  TP <- nGenes - FP 																					
-	  ## types des TP ( up & down)																		
-	  TP_up <- round(TP * up)
-	  TP_down <- TP - TP_up 
-	  ## TP avec des LFC élevés en valeur absolue
-	  TP_up_up=round((TP_up/2))
-	  TP_down_down=round((TP_down/2))
-	  #//.......................................................................................................//##
-	  ## vecteur des DE: 1 pour les gènes Up, -1 pour les gènes down et 0 pour les gènes non DE
-	  DE <- c( rep(1, TP_up), rep(-1, TP_down),rep(0, FP))
-	   #//.......................................................................................................//##
-	    ## LFC, environ moitié positif, moitié négatif (pour les gènes différentiellement exprimés (DE))
-	  delta <- rep(0, nGenes)
+	## Nombre des Faux positifs 																			
+	FP <- round(nGenes * pi0) 																			
+	## Nombre des vrais positifs																			
+	TP <- nGenes - FP 																					
+	## types des TP (up & down)																		
+	TP_up <- round(TP * up)
+	TP_down <- TP - TP_up 
+	## TP avec des LFC élevés en valeur absolue
+	TP_up_up=round((TP_up/2))
+	TP_down_down=round((TP_down/2))
+	
+	## vecteur des DE: 1 pour les gènes Up, -1 pour les gènes down et 0 pour les gènes non DE
+	DE <- c( rep(1, TP_up), rep(-1, TP_down),rep(0, FP))
+
+    ## LFC, environ moitié positif, moitié négatif (pour les gènes différentiellement exprimés (DE))
+	delta <- rep(0, nGenes)
 	 	
 	if ( is.null(fc)){
  	## choix du FC par dfaut
 	seed=1234
 	set.seed(seed)
 		if (TP_up_up==0){
-			FC=c(sort(rnorm(TP_up,1.4,0.2),decreasing = TRUE),
-			sort(rnorm(TP_down,-1.4,0.2),decreasing = FALSE),rep(0,FP))
+			FC=c(sort(rnorm(TP_up, 1.4, 0.2), decreasing = TRUE),
+			sort(rnorm(TP_down, -1.4, 0.2), decreasing = FALSE), rep(0,FP))
 		}else{
-			FC=c(sort(rnorm(TP_up,1.4,0.2),decreasing = TRUE)[1:TP_up_up],
-			sort(rnorm(TP_up,0.6,0.3),decreasing = TRUE)[1:(TP_up-TP_up_up)],
-			sort(rnorm(TP_down,-1.4,0.2),decreasing = FALSE)[1:TP_down_down],
-			sort(rnorm(TP_down,-0.6,0.3),decreasing = FALSE)[1:(TP_down-TP_down_down)],rep(0,FP))
+			FC=c(sort(rnorm(TP_up, 1.4, 0.2), decreasing = TRUE)[1:TP_up_up],
+			sort(rnorm(TP_up,0.6,0.3), decreasing = TRUE)[1:(TP_up-TP_up_up)],
+			sort(rnorm(TP_down,-1.4,0.2), decreasing = FALSE)[1:TP_down_down],
+			sort(rnorm(TP_down,-0.6,0.3), decreasing = FALSE)[1:(TP_down-TP_down_down)], rep(0,FP))
 		}
 	FC=exp(FC*log(2))
 	delta[DE != 0] <-log(FC)[DE != 0]
 	}else{
-	fc_u=read.table(fc)[,1]
-	# Vrifier qu'il n'y a pas de NA 
+	fc_u=read.table(fc)[, 1]
+	# Verifier qu'il n'y a pas de NA 
 	# si c'est les remplacer par 2 pour les up et 0.5 pour les down
 	if(all(is.na(fc_u))=="FALSE"){
 	pos=which(is.na(fc_u))
@@ -80,21 +82,16 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
      		lfc <- log(fc_u)
 		delta[DE != 0] <- lfc[DE != 0]
 		}else{ 
-			 message("Error: Vector FC used does not have the right size or it does not respect the data structure")
+			message("Error: Vector FC is in discordance with parameters pi0 and up:")
 			message("---The size of vector FC must be equal to: ", TP)
-			message("---The fisrt ",TP_up, " values must be greater than 1")
-			message("---The second ",TP_down, " values must be less than 1")
-			message("---To use the default vector of FC, put fc=NULL")
+			message("---The first ", TP_up, " values must be strictly greater than 1")
+			message("---The following ", TP_down, " values must be strictly less than 1")
+			message("---A default FC file is available when no value is given for fc_file parameter.")
 		 	return()
 
 		}
 	}
-	
-	
 
-
-
-#//.......................................................................................................//##
 	  ## h = vector indicating which pseudo-genes to re-simulate,0
 	  h <- rep(TRUE, nGenes) 
 	  counts <- matrix(0, nrow = nGenes, ncol = n1+n2) 
@@ -132,10 +129,8 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){
 	  rownames(counts)=c(paste("Gene.up",1:TP_up),paste("Gene.down",1:TP_down),paste("Gene" ,1:FP))
 	  delta <- delta / log(2)
 	  
-	colnames(counts)=c(rep("cond1",n1),rep("cond2",n2))
-	  list(counts = counts,   DE= DE)
-		  
-	
+	colnames(counts)=c(paste("cond1", 1:n1, sep="_"), paste("cond2", 1:n2, sep="_"))
+	list(counts = counts, DE=DE)
 }
 
 
@@ -152,7 +147,8 @@ counts=RNAseq_counts$counts
 
 
 # NORM
-
+if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
+if(! "limma" %in% pack_dispo) install.packages("limma", repos="https://cloud.r-project.org/")
 library("DESeq2")
 library("limma")
  
