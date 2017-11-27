@@ -28,9 +28,8 @@ les_args = parse_args(arg_parser)
 library(MASS)
 library(edgeR)
 
-counts.simulation <- function(nGenes, n1, n2, pi0, up, fc){ 
+counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=50){ 
 									
-    	seed=50;
 	set.seed(seed)
 	## mouyenne et dispersion
 	mu=runif(nGenes,500,3000);disp=rlnorm(nGenes,-1.13,1)
