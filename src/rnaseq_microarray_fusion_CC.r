@@ -1,5 +1,6 @@
+# Script fusion donnÃ©es microarray / RNA-Seq
 
-# Script fusion données microarray / RNA-Seq
+if(! "optparse" %in% row.names(installed.packages())) install.packages("optparse", repos="https://cloud.r-project.org/")
 
 library(optparse)
 
@@ -47,8 +48,8 @@ Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l
 	return(output)
 }
 
-# S'il y a des doublons dans les noms de patients entre les tableaux, on ajoute "_ti" au bout du nom de colonne (i étant le numéro du tableau dans la liste)
-# on récupère aussi le nom des éventuels tableaux avec des patients en double
+# S'il y a des doublons dans les noms de patients entre les tableaux, on ajoute "_ti" au bout du nom de colonne (i Ã©tant le numÃ©ro du tableau dans la liste)
+# on rÃ©cupÃ¨re aussi le nom des Ã©ventuels tableaux avec des patients en double
 cnames <- lapply(l_tables, colnames)
 t_noms_tables <- table(stack(cnames))
 t_pb_dupes <- names(cnames)[colSums(t_noms_tables>1)>0] # !!!! VOIR COMMMENT UTILISER L'INFORMATION !!!!
@@ -72,7 +73,7 @@ Fusion <- Reduce(function(tab1, tab2) {
 
 write.table(data.frame(Gene=row.names(Fusion), Fusion), file="Fusion.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE) 
 
-# Remplacement des valeurs manquantes par la médiane pour l'ACP (summary plot), avec transposition du tableau au préalable
+# Remplacement des valeurs manquantes par la mÃ©diane pour l'ACP (summary plot), avec transposition du tableau au prÃ©alable
 tFus <- sapply(as.data.frame(t(Fusion)), function(x) {x[is.na(x)] <- median(x, na.rm=TRUE); x})
 
 # ACP puis plot PP1
