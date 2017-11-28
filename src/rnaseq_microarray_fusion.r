@@ -20,16 +20,16 @@ les_args = parse_args(arg_parser)
 
 
 
-if(!require(“edgeR”, quietly=T, character.only=T)){
+if(!require("edgeR", quietly=T, character.only=T)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("edgeR")           
-    library(“edgeR”, quietly=T, character.only=T)
+    library("edgeR", quietly=T, character.only=T)
 }
 
-if(!require(“DESeq2”, quietly=T, character.only=T)){
+if(!require("DESeq2", quietly=T, character.only=T)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("DESeq2")           
-    library(“DESeq2”, quietly=T, character.only=T)
+    library("DESeq2", quietly=T, character.only=T)
 
 }
 
