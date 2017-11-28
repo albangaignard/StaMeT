@@ -18,13 +18,27 @@ arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
 
-if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
-if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
+
+
+if(!require(“edgeR”, quietly=T, character.only=T)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("edgeR")           
+    library(“edgeR”, quietly=T, character.only=T)
+}
+
+if(!require(“DESeq2”, quietly=T, character.only=T)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("DESeq2")           
+    library(“DESeq2”, quietly=T, character.only=T)
+
+}
+
+
 if(! "preprocessCore" %in% pack_dispo) install.packages("preprocessCore", repos="https://cloud.r-project.org/")
 if(! "clusterSim" %in% pack_dispo) install.packages("clusterSim", repos="https://cloud.r-project.org/")
 library("MASS")
-library("DESeq2")
-library("edgeR")
+
+
 library("preprocessCore")
 library("clusterSim")
 
