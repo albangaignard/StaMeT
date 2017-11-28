@@ -16,7 +16,7 @@ option_list = list(
               help="Proportion of up-regulated genes within differentially-expressed genes [default: %default]"),
 	make_option(c("-diff", "--diff_genes_ratio"), type="numeric", default=0.1, 
               help="Proportion of differentially expressed genes (genes related to phenotype) within all genes [default: %default]"),
-	make_option(c("-fc", "--fc_file"), type="character", default="FC.txt", 
+	make_option(c("-fc", "--fc_file"), type="character", default=NULL, 
               help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details. [default: %default]"),			  
 	make_option(c("-rseq_n", "--rnaseq_norm"), type="character", default="DESeq2", 
               help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default: %default]"),
@@ -26,6 +26,20 @@ option_list = list(
 
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
+
+# création du vecteur des foldchange :
+# - si aucun n'est fourni, récupération des fold-change par défaut, soit tels quels, soit avec échantillonnage pour avoir les bons nombres de DE et de up
+# - si le fichier est fourni, import du fichier
+if (is.null(les_args$fc_file)) {
+    FC <- read.table("FC.txt", as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE]
+    if(les_args$gene_number!=10000 | les_args$diff_genes_ratio!=0.1 | les_args$up_ratio!=0.5){ 
+        nb_DE <- round(les_args$gene_number*les_args$diff_genes_ratio)
+        nb_up <- round(nb_DE*les_args$up_ratio)
+        FC <- c(sample(FC[1:500], nb_up, replace=TRUE), sample(FC[1:500], nb_DE-nb_up, replace=TRUE)
+    } 
+} else {
+    FC <- read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE]
+}
 
 if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
 library(MASS)
@@ -115,7 +129,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 
 
 RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
-                                   fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE], seed=les_args$seed)
+                                   fc=FC, seed=les_args$seed)
 counts=RNAseq_counts$counts
 
 # NORM
