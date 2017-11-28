@@ -145,7 +145,7 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 				  voom_trans<-voom(counts, design,span = 0.5, plot = FALSE,save.plot = FALSE )
 				  voom_matrix <-  voom_trans$E
 				  output <- voom_matrix})
-
+	return(output)
 
 }
 
