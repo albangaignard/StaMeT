@@ -43,10 +43,10 @@ if (is.null(les_args$fc_file)) {
 
 
 
-if(!require(“edgeR”, quietly=T, character.only=T)){
+if(!require("edgeR", quietly=T, character.only=T)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("edgeR")           
-    library(“edgeR”, quietly=T, character.only=T)
+    library("edgeR", quietly=T, character.only=T)
 }
 
 library(MASS)
@@ -140,10 +140,10 @@ RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samp
 counts=RNAseq_counts$counts
 
 # NORM
-if(!require(“DESeq2”, quietly=T, character.only=T)){
+if(!require("DESeq2", quietly=T, character.only=T)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("DESeq2")           
-    library(“DESeq2”, quietly=T, character.only=T)
+    library("DESeq2", quietly=T, character.only=T)
 }
 
  
