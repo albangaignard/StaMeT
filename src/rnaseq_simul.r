@@ -117,7 +117,6 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
                                    fc=read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE], seed=les_args$seed)
 counts=RNAseq_counts$counts
-write.table(counts, "TEST_RNA_COUNTS.txt", sep="\t", row.names=FALSE, quote=FALSE)
 
 # NORM
 if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
