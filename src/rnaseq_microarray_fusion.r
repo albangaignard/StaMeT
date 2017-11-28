@@ -17,12 +17,6 @@ option_list = list(
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
-meth <- les_args$standardisation
-nom_tables <- strsplit(les_args$tables, ";")[[1]]
-l_tables <- lapply(nom_tables, function(nom_fich) read.table(nom_fich, sep="\t", header=TRUE, as.is=TRUE, row.names=1))
-names(l_tables) <- sub("\\..+$", "", basename(nom_tables))
-nb_t <- length(l_tables)
-
 
 if(! "MASS" %in% pack_dispo) install.packages("MASS", repos="https://cloud.r-project.org/")
 if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
@@ -37,6 +31,19 @@ library("limma")
 library("preprocessCore")
 library("clusterSim")
 
+
+meth <- les_args$standardisation
+nom_tables <- strsplit(les_args$tables, ";")[[1]]
+
+### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
+
+
+###
+
+# import des tableaux
+l_tables <- lapply(nom_tables, function(nom_fich) read.table(nom_fich, sep="\t", header=TRUE, as.is=TRUE, row.names=1))
+names(l_tables) <- sub("\\..+$", "", basename(nom_tables))
+nb_t <- length(l_tables)
 
 # Fonction standardisation 
 Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l_tables[[1]]){
