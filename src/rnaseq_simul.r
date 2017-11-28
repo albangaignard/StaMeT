@@ -102,6 +102,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 		phi[h, ] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
 		## dispersion des comptages
 		counts[h, ] <- rnegbin(sum(h) * (n1+n2), lambda[h, ], 1/phi[h, ])
+		h <- (rowSums(cpm(counts) > 2) < 3)
 	}
 	  
 	  rownames(counts) <- c(paste("Gene.up", 1:TP_up), paste("Gene.down", 1:TP_down), paste("Gene", 1:FP))
