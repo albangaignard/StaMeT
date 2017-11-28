@@ -1,0 +1,46 @@
+<tool id="Multi_transcripts_fusion" name="Multi transcripts fusion" version="0.1.0">
+  <description>Multi transcripts fusion tool</description>
+
+<edam_topics>
+    <edam_topic>topic_2269</edam_topic>
+</edam_topics>
+
+<edam_operations>
+    <edam_operation>operation_3434</edam_operation>
+</edam_operations>
+
+  <command interpreter="Rscript">
+    rnaseq_microarray_fusion.r
+    --tables 
+    ${"; ".join(map(str, $tables))}
+    --standardisation $standardisation
+    --all_genes $all_genes
+  </command>
+  
+  
+  <inputs>
+    <param name="tables" type="data" format="tabular" multiple="true" label="Gene expression tables"/>
+
+    <param name="standardisation" type="select" value="zscore" label="Standardisation method" help="Standardisation method, possible values: zscore, quantile, robust_zscore [default value: zscore]"> 
+          <option value="zscore">zscore</option>
+          <option value="quantile">quantile</option>
+          <option value="robust_zscore">robust_zscore</option>
+    </param>
+
+    <param name="all_genes" type="select" label="All genes" help="Should all genes be returned? FALSE will return only common genes between tables [default value: All genes]">
+          <option value="TRUE">All genes</option>
+          <option value="FALSE">Genes intersection only</option>
+    </param>
+
+  </inputs>
+
+  <outputs>
+    <data name="Fusioned transcripts" format="tabular" from_work_dir="Fusion.txt" label="Fusioned transcripts" />
+    <data name="Transcripts fusion summary" format="png" from_work_dir="Summary_Plot_Fusion.png" label="Fusion summary plot" />
+  </outputs>
+
+  <citations>
+    <citation type="doi">10.1093/bioinformatics/btp698</citation>
+  </citations>
+
+</tool>
