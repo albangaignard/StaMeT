@@ -146,7 +146,7 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 				  voom_matrix <-  voom_trans$E
 				  output <- voom_matrix})
 
-	return(output)
+
 }
 
 Norm_count <- Normalization(counts, Norm=les_args$rnaseq_norm)
