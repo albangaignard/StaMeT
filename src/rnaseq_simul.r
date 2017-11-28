@@ -136,15 +136,15 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 					#sizeFactors(cds)
 					Data_Norm <- counts(cds, normalized=TRUE) 
 					Norm_DESeq2_log2=log2(Data_Norm+1)
-					output=Norm_DESeq2_log2},
+					output <- Norm_DESeq2_log2},
           "edgeR"={cds <- DGEList(counts, group=condition )
 				   cds <- calcNormFactors(cds, method="TMM")
 				   lcpm <- cpm(cds, log=TRUE)
-				   output=lcpm},
+				   output <- lcpm},
 		  "VOOM"={design=model.matrix(~0+condition)
 				  voom_trans<-voom(counts, design,span = 0.5, plot = FALSE,save.plot = FALSE )
 				  voom_matrix <-  voom_trans$E
-				  output=voom_matrix})
+				  output <- voom_matrix})
 
 	return(output)
 }
