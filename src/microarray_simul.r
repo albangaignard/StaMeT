@@ -27,6 +27,11 @@ option_list = list(
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
+### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
+
+
+###
+
 
 Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE, seed=NULL){
 ## Initialisation des paramètres
