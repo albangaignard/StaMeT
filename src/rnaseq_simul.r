@@ -27,7 +27,6 @@ option_list = list(
 arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
-if(! "MASS" %in% pack_dispo) install.packages("MASS", repos="https://cloud.r-project.org/")
 if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
 library(MASS)
 library(edgeR)
@@ -120,9 +119,7 @@ counts=RNAseq_counts$counts
 
 # NORM
 if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
-if(! "limma" %in% pack_dispo) install.packages("limma", repos="https://cloud.r-project.org/")
 library("DESeq2")
-library("limma")
  
 Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
     ## Verifier que n1 et n2 soient suprieurs 0
