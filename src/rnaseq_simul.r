@@ -41,9 +41,16 @@ if (is.null(les_args$fc_file)) {
     FC <- read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE]
 }
 
-if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
+
+
+if(!require(“edgeR”, quietly=T, character.only=T)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("edgeR")           
+    library(“edgeR”, quietly=T, character.only=T)
+}
+
 library(MASS)
-library(edgeR)
+
 
 ### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
 
@@ -133,8 +140,12 @@ RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samp
 counts=RNAseq_counts$counts
 
 # NORM
-if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
-library("DESeq2")
+if(!require(“DESeq2”, quietly=T, character.only=T)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("DESeq2")           
+    library(“DESeq2”, quietly=T, character.only=T)
+}
+
  
 Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
     ## Verifier que n1 et n2 soient suprieurs 0
