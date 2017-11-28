@@ -41,7 +41,7 @@ if (is.null(les_args$fc_file)) {
     if(les_args$gene_number!=10000 | les_args$diff_genes_ratio!=0.1 | les_args$up_ratio!=0.5){ 
         nb_DE <- round(les_args$gene_number*les_args$diff_genes_ratio)
         nb_up <- round(nb_DE*les_args$up_ratio)
-        FC <- c(sample(FC[1:500], nb_up, replace=TRUE), sample(FC[1:500], nb_DE-nb_up, replace=TRUE))
+        FC <- c(sample(FC[1:500], nb_up, replace=TRUE), sample(FC[501:1000], nb_DE-nb_up, replace=TRUE))
     } 
 } else {
     FC <- read.table(les_args$fc_file, as.is=TRUE, header=TRUE, sep="\t")[, 1, drop=TRUE]
