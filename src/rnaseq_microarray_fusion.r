@@ -18,16 +18,13 @@ arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
 
-if(! "MASS" %in% pack_dispo) install.packages("MASS", repos="https://cloud.r-project.org/")
 if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-project.org/")
 if(! "DESeq2" %in% pack_dispo) install.packages("DESeq2", repos="https://cloud.r-project.org/")
-if(! "limma" %in% pack_dispo) install.packages("limma", repos="https://cloud.r-project.org/")
 if(! "preprocessCore" %in% pack_dispo) install.packages("preprocessCore", repos="https://cloud.r-project.org/")
 if(! "clusterSim" %in% pack_dispo) install.packages("clusterSim", repos="https://cloud.r-project.org/")
 library("MASS")
 library("DESeq2")
 library("edgeR")
-library("limma")
 library("preprocessCore")
 library("clusterSim")
 
