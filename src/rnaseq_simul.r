@@ -125,7 +125,7 @@ if(! "limma" %in% pack_dispo) install.packages("limma", repos="https://cloud.r-p
 library("DESeq2")
 library("limma")
  
-Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2, Norm=c("DESeq2", "edgeR", "VOOM")){
+Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
     ## Verifier que n1 et n2 soient suprieurs 0
 	## si ce n'est pas le cas, on va mettre un design: ~1
     if(n1 & n2){
@@ -141,7 +141,7 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 					cds=estimateSizeFactors(dds) 
 					#sizeFactors(cds)
 					Data_Norm <- counts(cds, normalized=TRUE) 
-					Norm_DESeq2_log2=log2(Data_Norm+1)
+					Norm_DESeq2_log2 <- log2(Data_Norm+1)
 					output <- Norm_DESeq2_log2},
           "edgeR"={cds <- DGEList(counts, group=condition )
 				   cds <- calcNormFactors(cds, method="TMM")
@@ -152,10 +152,9 @@ Normalization <- function(counts, n1=les_args$samples_n1, n2=les_args$samples_n2
 				  voom_matrix <-  voom_trans$E
 				  output <- voom_matrix})
 	return(output)
-
 }
 
-Norm_count <- Normalization(counts, Norm=les_args$rnaseq_norm)
+Norm_count <- Normalization(counts, n1=les_args$samples_n1, n2=les_args$samples_n2, Norm=les_args$rnaseq_norm)
 
 write.table(data.frame(Gene=row.names(Norm_count), Norm_count), file="RNAseq_simulation.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
 
