@@ -32,6 +32,12 @@ if(! "edgeR" %in% pack_dispo) install.packages("edgeR", repos="https://cloud.r-p
 library(MASS)
 library(edgeR)
 
+### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
+
+
+###
+
+
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){ 
 									
 	## si un seed a été entré, on le fixe
