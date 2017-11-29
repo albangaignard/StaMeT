@@ -134,10 +134,10 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 		true_means[h] <- mu[selected_genes[h]]
 		true_disps[h] <- disp[selected_genes[h]]
 		
-		lambda[h,] <- matrix(true_means[h], ncol = 1) %*% 
-					  matrix(rep(1, n1+n2), nrow = 1) * 
-					  cbind(matrix(rep(1, sum(h) * n1), ncol = n1), 
-							matrix(rep(exp(delta[h]), n2), ncol = n2))
+		lambda[h, ] <- matrix(true_means[h], ncol = 1) %*% 
+					   matrix(rep(1, n1+n2), nrow = 1) * 
+					   cbind(matrix(rep(1, sum(h) * n1), ncol = n1, nrow=nGenes), 
+							 matrix(rep(exp(delta[h]), n2), ncol = n2, nrow=nGenes))
 		
 		## moyenne des comptages
 		phi[h, ] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
@@ -149,7 +149,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 	rownames(counts) <- grep("\\d$", c(paste("Gene.up", seq_len(TP_up), sep="_"), paste("Gene.down", seq_len(TP_down), sep="_"), paste("Gene" , seq_len(FP), sep="_")), value=TRUE)
 	delta <- delta/log(2)
 	  
-	colnames(counts)=grep("\\d$", c(paste("cond1", seq_len(n1), sep="_"), paste("cond2", seq_len(n2), sep="_")), value=TRUE)
+	colnames(counts) <- grep("\\d$", c(paste("cond1", seq_len(n1), sep="_"), paste("cond2", seq_len(n2), sep="_")), value=TRUE)
 	list(counts = counts, DE=DE)
 }
 
