@@ -81,7 +81,7 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 			## on tire au sort la diff de moyenne, selon muminde et lambda2
 			if(( i<(TP_up_up+1)) | ((i>TP_up) & (i<TP_up+TP_down_down+1))) {
 				mude <- muminde1 + rexp(1, lambda2) 
-				## on tire au sort si gène up ou down, up pour le if, down pour le else
+				## gène up ou down, up pour le if, down pour le else
 				if (i <= TP_up_up) { 
 				    fc <- rnorm(n2, mean = mude, sd = sdde)
 				    LFC[i, ] <- mean(fc)
@@ -100,7 +100,7 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 				xdat[i, ] <- c(xi1, xi2)
 			} else {
 			    mude <- muminde2 + rexp(1, lambda2) 
-				## on tire au sort si gène up ou down, up pour le if, down pour le else
+				## gène up ou down, up pour le if, down pour le else
 				if ((i >TP_up_up)&(i<=TP_up)) { 
 				fc <- rnorm(n2, mean = mude, sd = sdde)
 				LFC[i, ] <- mean(fc)
