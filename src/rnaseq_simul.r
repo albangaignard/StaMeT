@@ -132,7 +132,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 		h <- (rowSums(cpm(counts) > 2) < 3)
 	}
 	  
-	  rownames(counts) <- c(paste("Gene.up", 1:TP_up), paste("Gene.down", 1:TP_down), paste("Gene", 1:FP))
+	  rownames(counts) <- grep("\\d$", c(paste("Gene.up", seq_len(TP_up), sep="_"), paste("Gene.down", seq_len(TP_down), sep="_"), paste("Gene" , seq_len(FP), sep="_")), value=TRUE)
 	  delta <- delta/log(2)
 	  
 	colnames(counts)=c(paste("cond1", 1:n1, sep="_"), paste("cond2", 1:n2, sep="_"))
