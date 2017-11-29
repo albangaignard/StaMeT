@@ -175,6 +175,7 @@ Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
     	condition <- factor(rep(paste0("Cond", 1:2), c(n1, n2)))
 	} else {
 	    exist.cond <- FALSE
+	    condition <- factor(rep(1, n1+n2))
 	}
 	
 	# normalisation
