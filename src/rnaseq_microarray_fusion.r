@@ -15,7 +15,7 @@ option_list = list(
               help="Standardisation method, possible values: zscore, quantile, robust_zscore [default: %default]"),
 	make_option(c("-all", "--all_genes"), type="logical", default=TRUE, 
               help="Should all genes be returned? FALSE will return only common genes between tables [default: %default]"),
-	make_option(c("-t", "--tables"), type="character", default="MicroArray_simulation.txt;RNASeq_simulation.txt", 
+	make_option(c("-t", "--tables"), type="character", default="MicroArray_simulation.txt,RNASeq_simulation.txt", 
               help="Path to the text files with data to merge, separated by semi-colons. See documentation for details. [default: %default]")		
 )
 
