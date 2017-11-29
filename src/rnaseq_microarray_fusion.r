@@ -49,7 +49,7 @@ library("clusterSim")
 
 
 meth <- les_args$standardisation
-nom_tables <- strsplit(les_args$tables, " ")[[1]]
+nom_tables <- strsplit(les_args$tables, ",")[[1]]
 
 ### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
 

@@ -12,7 +12,7 @@
   <command interpreter="Rscript">
     rnaseq_microarray_fusion.r
     --tables 
-    ${" ".join(map(str, $tables))}
+    ${",".join(map(str, $tables))}
     --standardisation $standardisation
     --all_genes $all_genes
   </command>
