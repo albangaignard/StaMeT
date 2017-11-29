@@ -59,9 +59,28 @@ library(MASS)
 
 
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){ 
+	
+    ## au cas où on aurait autre chose que des nombres entiers pour nGenes, n1 et n2, on les arrondit pour avoir des entiers
+    nGenes <- round(nGenes) ; n1 <- round(n1) ; n2 <- round(n2)
+    
+    ## Vérification que tous les paramètres numériques le sont bien
+    check_num <- sapply(list(nGenes, n1, n2, pi0, up), is.numeric)
+    if(any(!check_num)) {message("All parameters must be numeric: ", paste(sapply(which(!check_num), switch, "gene number", "samples with phenotype 1",  "samples with phenotype 2", "DE proportion", "up DE proportion"), collapse=", "), " was(were) not."); return()}
+    
+    ## Vérification que tous les paramètres numériques sont positifs
+    check_pos <- c(nGenes, n1, n2, pi0, up)>=0
+    if(any(!check_pos)) {message("Parameter(s) ", paste(sapply(which(!check_pos), switch, "gene number", "samples with phenotype 1",  "samples with phenotype 2", "DE proportion", "up DE proportion"), collapse=", "), " should be positive."); return()}
+    
+    ## Vérification que l'on a au moins un gène demandé et au moins un patient
+    if(any(c(nGenes, n1+n2)<=0)) {message("You need at least one gene and one patient to compute the simulation"); return()}
+    
+    ## Vérification que les 2 paramètres de proportions sont bien compris entre 0 et 1
+    if(pi0<0 | pi0>1) {message("Proportion of DE genes should be a value between 0 ans 1."); return()}
+    if(up<0 | up>1) {message("Proportion of up-regulated genes should be a value between 0 ans 1."); return()}	
+	
 									
 	## si un seed a été entré, on le fixe
-    if(!is.null(seed)) set.seed(seed)
+    if(!is.null(seed) & is.numeric(seed)) set.seed(seed)
 	
 	## moyenne et dispersion
 	mu <- runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
@@ -80,10 +99,11 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
     ## LFC, environ moitié positif, moitié négatif (pour les gènes différentiellement exprimés (DE))
 	delta <- rep(0, nGenes)
 	 	
-	# Verifier qu'il n'y a pas de NA 
+	# Verification qu'il n'y a pas de NA et que l'on a des valeurs numériques uniquement
 	# sinon, on sort de la fonction avec message d'erreur
 	if(any(is.na(fc))) {message("NA are not allowed in fc_file.") ; return()}
-
+	if(!is.numeric(fc)) {fc <- as.numeric(fc) ; if(any(is.na(fc))) {message("Fold change values should be numeric"); return()}}
+	
 	if((length(fc)==TP) & all(fc[1:TP_up]>1) & all(fc[(TP_up+1):TP]<1)){
      	lfc <- log(fc)
 		delta[DE != 0] <- lfc[DE != 0]
@@ -148,8 +168,8 @@ if(!require("DESeq2", quietly=TRUE, character.only=TRUE)){
 
  
 Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
-    ## Verifier que n1 et n2 soient suprieurs 0
-	## si ce n'est pas le cas, on va mettre un design: ~1
+
+    ## Si on a qu'une condition (n1 ou n2 nul), on met un design: ~1 sinon on le crée suivant les conditions
     if(n1 & n2){
     	condition <- factor(rep(paste0("Cond", 1:2), c(n1, n2)))
 	} else {
@@ -172,7 +192,8 @@ Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
 		  "VOOM"={design=model.matrix(~0+condition)
 				  voom_trans<-voom(counts, design,span = 0.5, plot = FALSE,save.plot = FALSE )
 				  voom_matrix <-  voom_trans$E
-				  output <- voom_matrix})
+				  output <- voom_matrix},
+		  {message("Unrecognised normalisation method: ", Norm, ". Normalisation method must be one of 'DESeq2', 'edgeR' or 'VOOM'") ; return()})
 	return(output)
 }
 
