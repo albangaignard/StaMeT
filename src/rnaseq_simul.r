@@ -49,10 +49,10 @@ if (is.null(les_args$fc_file)) {
 
 
 
-if(!require("edgeR", quietly=T, character.only=T)){
+if(!require("edgeR", quietly=TRUE, character.only=TRUE)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("edgeR")           
-    library("edgeR", quietly=T, character.only=T)
+    library("edgeR", quietly=TRUE, character.only=TRUE)
 }
 
 library(MASS)
@@ -71,11 +71,11 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 	
 	## moyenne et dispersion
 	mu <- runif(nGenes, 500, 3000); disp=rlnorm(nGenes, -1.13, 1)
-	replace <- TRUE			
-	## Nombre des Faux positifs 																			
-	FP <- round(nGenes * pi0) 																			
+	replace <- TRUE																					
 	## Nombre des vrais positifs																			
-	TP <- nGenes - FP 																					
+	TP <- round(nGenes * pi0) 			
+	## Nombre des Faux positifs 																			
+	FP <- nGenes - TP 																			
 	## types des TP (up & down)																		
 	TP_up <- round(TP * up)
 	TP_down <- TP - TP_up 
@@ -141,15 +141,15 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 
 
 
-RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, 
+RNAseq_counts <- counts.simulation(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=les_args$diff_genes_ratio, up=les_args$up_ratio, 
                                    fc=FC, seed=les_args$seed)
 counts=RNAseq_counts$counts
 
 # NORM
-if(!require("DESeq2", quietly=T, character.only=T)){
+if(!require("DESeq2", quietly=TRUE, character.only=TRUE)){
     source("http://bioconductor.org/biocLite.R")                  
     biocLite("DESeq2")           
-    library("DESeq2", quietly=T, character.only=T)
+    library("DESeq2", quietly=TRUE, character.only=TRUE)
 }
 
  
