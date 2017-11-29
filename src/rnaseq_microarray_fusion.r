@@ -51,20 +51,21 @@ library("clusterSim")
 meth <- les_args$standardisation
 nom_tables <- strsplit(les_args$tables, ",")[[1]]
 
-### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
-
-
-###
-
 # import des tableaux
 l_tables <- lapply(nom_tables, function(nom_fich) read.table(nom_fich, sep="\t", header=TRUE, as.is=TRUE, row.names=1))
 names(l_tables) <- sub("\\..+$", "", basename(nom_tables))
 nb_t <- length(l_tables)
 
+# Vérification que "all_genes" est bien TRUE ou FALSE, sinon, on met TRUE avec un message
+if(!is.logical(les_args$all_genes)) {les_args$all_genes <- TRUE ; print("Parameter all_genes has been set to TRUE.", quote=FALSE)}
+
 # Fonction standardisation 
 Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l_tables[[1]]){
 	
 	dat <- as.matrix(dat)
+	
+	## Vérification que les données sont numériques
+	if (!is.numeric(dat)){NA_dat <- is.na(dat); dat <- as.numeric(dat); if(any(is.na(dat)!=NA_dat)){message("Data must be numeric. See documentation for details.") ; return()}}
 	
 	switch(St, 
            "zscore"={output <- data.Normalization(dat, type="n1", normalization="row")},
@@ -75,7 +76,8 @@ Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l
 				       # Quantile normalize the data, against the reference distribution
 				       qn = data.matrix(normalize.quantiles.use.target(data.matrix(target), targ, copy=FALSE))
 				       output <- t(qn)
-				       rownames(output) <- rownames(dat)})
+				       rownames(output) <- rownames(dat)},
+		   {message("Unrecognised normalisation method: ", St, ". Standardisation method must be one of 'zscore', 'robust_zscore' or 'quantile'") ; return()})
 	return(output)
 }
 
@@ -116,10 +118,3 @@ png("Summary_Plot_Fusion.png")
  plot(0:1, 0:1, type="n", axes=FALSE, xlab="", ylab="")
  legend("topleft", bty="n", col=rainbow(nb_t), legend=names(l_tables), pch=19, ncol=nb_t%/%3+sign(nb_t%%3))
 dev.off()
-
-
-
-
-
-
-
