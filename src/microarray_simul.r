@@ -33,7 +33,10 @@ arg_parser = OptionParser(option_list=option_list)
 les_args = parse_args(arg_parser)
 
 Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE, seed=NULL){
-
+    
+    ## Vérification que l'on a au moins un gène demandé et au moins un patient
+    if(any(c(nGenes, n1+n2)<=0)) {message("You need at least one gene and one patient to compute the simulation"); return()}
+    
     ## Initialisation des paramètres
 	shape2 = 4; lb = 4; ub = 14; lambda1 = 0.13; sdde = 0.5; sdn = 0.4; N=n1+n2+1; lambda2=4
 
@@ -120,7 +123,7 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	LFC=LFC*xid
 
 	## annotation des colonnes et des lignes
-    colnames(xdat) <- c("V1", paste("cond1", 1:n1, sep="_"), paste("cond2", 1:n2, sep="_")) 
+    colnames(xdat) <- grep("\\d$", c("V1", paste("cond1", seq_len(n1), sep="_"), paste("cond2", seq_len(n2), sep="_")), value=TRUE)
 	rownames(xdat) <- grep("\\d$", c(paste("Gene.up", seq_len(TP_up), sep="_"), paste("Gene.down", seq_len(TP_down), sep="_"), paste("Gene" , seq_len(FP), sep="_")), value=TRUE)
 	## sd de la 1e colonne = "individu" ref pour les ratios
     xsd <- sd(xdat[, 1]) 
