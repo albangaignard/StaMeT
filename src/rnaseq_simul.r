@@ -136,8 +136,8 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 		
 		lambda[h, ] <- matrix(true_means[h], ncol = 1) %*% 
 					   matrix(rep(1, n1+n2), nrow = 1) * 
-					   cbind(matrix(rep(1, sum(h) * n1), ncol = n1, nrow=nGenes), 
-							 matrix(rep(exp(delta[h]), n2), ncol = n2, nrow=nGenes))
+					   cbind(matrix(rep(1, sum(h) * n1), ncol = n1, nrow=sum(h)), 
+							 matrix(rep(exp(delta[h]), n2), ncol = n2, nrow=sum(h)))
 		
 		## moyenne des comptages
 		phi[h, ] <- matrix(rep(true_disps[h],n1+n2 ), ncol = n1+n2)
@@ -171,15 +171,16 @@ Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
 
     ## Si on a qu'une condition (n1 ou n2 nul), on met un design: ~1 sinon on le crée suivant les conditions
     if(n1 & n2){
+        exist.cond <- TRUE
     	condition <- factor(rep(paste0("Cond", 1:2), c(n1, n2)))
 	} else {
-	    condition <- rep(1, n1+n2)
+	    exist.cond <- FALSE
 	}
 	
 	# normalisation
 	switch(Norm,
 	      "DESeq2"={colData <- data.frame(condition, row.names=colnames(counts))
-					dds <- DESeqDataSetFromMatrix(counts, colData, design=~condition)
+					dds <- DESeqDataSetFromMatrix(counts, colData, design=if(exist.cond) ~condition else ~1)
 					cds=estimateSizeFactors(dds) 
 					#sizeFactors(cds)
 					Data_Norm <- counts(cds, normalized=TRUE) 
@@ -190,7 +191,7 @@ Normalization <- function(counts, n1, n2, Norm=c("DESeq2", "edgeR", "VOOM")){
 				   lcpm <- cpm(cds, log=TRUE)
 				   output <- lcpm},
 		  "VOOM"={design=model.matrix(~0+condition)
-				  voom_trans<-voom(counts, design,span = 0.5, plot = FALSE,save.plot = FALSE )
+				  voom_trans<-voom(counts, design,span = 0.5, plot = FALSE, save.plot = FALSE )
 				  voom_matrix <-  voom_trans$E
 				  output <- voom_matrix},
 		  {message("Unrecognised normalisation method: ", Norm, ". Normalisation method must be one of 'DESeq2', 'edgeR' or 'VOOM'") ; return()})
