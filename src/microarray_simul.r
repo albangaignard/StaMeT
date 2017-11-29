@@ -18,15 +18,15 @@ option_list = list(
 	make_option(c("-sn2", "--samples_n2"), type="numeric", default=75, 
               help="Number of samples with phenotype 2 [default: %default]"),
 	make_option(c("-up", "--up_ratio"), type="numeric", default=0.5, 
-              help="Proportion of up-regulated (phenotype 2 / phenotype 1) genes within differentially-expressed genes [default: %default]"),
+              help="Proportion of up-regulated (phenotype 2 / phenotype 1) genes within differentially-expressed genes, between 0 and 1 [default: %default]"),
 	make_option(c("-diff", "--diff_genes_ratio"), type="numeric", default=0.1, 
-              help="Proportion of differentially expressed genes (genes related to phenotype) within all genes [default: %default]"),
+              help="Proportion of differentially expressed genes (genes related to phenotype) within all genes, between 0 and 1 [default: %default]"),
 	make_option(c("-m1", "--m1"), type="numeric", default=1.4, 
               help="average difference between global mean and phenotype mean for highly differentially expressed genes [default: %default]"),			  
 	make_option(c("-m2", "--m2"), type="numeric", default=0.8, 
               help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default: %default]"),
     make_option(c("-s", "--seed"), type="numeric", default=NULL, 
-              help="Seed value: can be set to make the simulation reproducible. [default: %default]")		
+              help="Seed value: can be set to make the simulation reproducible. Non-numeric values are considered NULL. [default: %default]")		
 )
 
 arg_parser = OptionParser(option_list=option_list)
@@ -34,14 +34,29 @@ les_args = parse_args(arg_parser)
 
 Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, ratio=FALSE, seed=NULL){
     
+    ## au cas où on aurait autre chose que des nombres entiers pour nGenes, n1 et n2, on les arrondit pour avoir des entiers
+    nGenes <- round(nGenes) ; n1 <- round(n1) ; n2 <- round(n2)
+    
+    ## Vérification que tous les paramètres numériques le sont bien
+    check_num <- sapply(list(nGenes, n1, n2, pi0, up, muminde1, muminde2), is.numeric)
+    if(any(!check_num)) {message("All parameters must be numeric: ", paste(sapply(which(!check_num), switch, "gene number", "samples with phenotype 1",  "samples with phenotype 2", "DE proportion", "up DE proportion", "high mean difference", "low mean difference"), collapse=", "), " was(were) not."); return()}
+    
+    ## Vérification que tous les paramètres numériques sont positifs
+    check_pos <- c(nGenes, n1, n2, pi0, up, muminde1, muminde2)>=0
+    if(any(!check_pos)) {message("Parameter(s) ", paste(sapply(which(!check_pos), switch, "gene number", "samples with phenotype 1",  "samples with phenotype 2", "DE proportion", "up DE proportion", "high mean difference", "low mean difference"), collapse=", "), " should be positive."); return()}
+    
     ## Vérification que l'on a au moins un gène demandé et au moins un patient
     if(any(c(nGenes, n1+n2)<=0)) {message("You need at least one gene and one patient to compute the simulation"); return()}
+    
+    ## Vérification que les 2 paramètres de proportions sont bien compris entre 0 et 1
+    if(pi0<0 | pi0>1) {message("Proportion of DE genes should be a value between 0 ans 1."); return()}
+    if(up<0 | up>1) {message("Proportion of up-regulated genes should be a value between 0 ans 1."); return()}
     
     ## Initialisation des paramètres
 	shape2 = 4; lb = 4; ub = 14; lambda1 = 0.13; sdde = 0.5; sdn = 0.4; N=n1+n2+1; lambda2=4
 
-    ## si un seed a été entré, on le fixe
-    if(!is.null(seed)) set.seed(seed)
+    ## si un seed a été entré et qu'il est bien numérique, on le fixe
+    if(!is.null(seed) & is.numeric(seed)) set.seed(seed)
 
 	## Nombre de vrais positifs																			
 	TP <- round(nGenes * pi0)		
