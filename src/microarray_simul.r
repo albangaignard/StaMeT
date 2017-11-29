@@ -45,11 +45,11 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
       ## si un seed a été entré, on le fixe
       if(!is.null(seed)) set.seed(seed)
 
-	  ## Nombre des Faux positifs 																			
-	  FP <- round(nGenes * pi0) 																			
-	  ## Nombre des vrais positifs																			
-	  TP <- nGenes - FP 																					
-	  ## types des TP ( up & down)																		
+	  ## Nombre de vrais positifs																			
+	  TP <- round(nGenes * pi0)		
+	  ## Nombre de Faux positifs 																			
+	  FP <- nGenes - TP 																			
+	  ## types des TP (up & down)																		
 	  TP_up <- round(TP * up)
 	  TP_down <- TP - TP_up 
 	  ## TP avec des LFC élevés en valeur absolue
@@ -147,51 +147,6 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	list(xdata=xdata, xid=xid, xsd=xsd, delta=LFC)
 }
 
-Array_data <- Simulation.microarray(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=1-les_args$diff_genes_ratio, up=les_args$up_ratio, muminde1=les_args$m1, muminde2=les_args$m2, seed=les_args$seed)
+Array_data <- Simulation.microarray(nGenes=les_args$gene_number, n1=les_args$samples_n1, n2=les_args$samples_n2, pi0=les_args$diff_genes_ratio, up=les_args$up_ratio, muminde1=les_args$m1, muminde2=les_args$m2, seed=les_args$seed)
 
 write.table(data.frame(Gene=row.names(Array_data$xdata), Array_data$xdata), file="MicroArray_simulation.txt", sep="\t", row.names=FALSE, col.names=TRUE, quote=FALSE)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
