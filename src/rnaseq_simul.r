@@ -104,7 +104,7 @@ counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){
 	if(any(is.na(fc))) {message("NA are not allowed in fc_file.") ; return()}
 	if(!is.numeric(fc)) {fc <- as.numeric(fc) ; if(any(is.na(fc))) {message("Fold change values should be numeric"); return()}}
 	
-	if((length(fc)==TP) & all(fc[1:TP_up]>1) & all(fc[(TP_up+1):TP]<1)){
+	if((length(fc)==TP) & (TP_up==0 | all(fc[1:TP_up]>1)) & all(fc[(TP_up+1):TP]<1)){
      	lfc <- log(fc)
 		delta[DE != 0] <- lfc[DE != 0]
 	}else{ 
