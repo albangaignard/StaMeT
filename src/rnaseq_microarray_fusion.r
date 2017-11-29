@@ -57,7 +57,7 @@ names(l_tables) <- sub("\\..+$", "", basename(nom_tables))
 nb_t <- length(l_tables)
 
 # Vérification que "all_genes" est bien TRUE ou FALSE, sinon, on met TRUE avec un message
-if(!is.logical(les_args$all_genes)) {les_args$all_genes <- TRUE ; print("Parameter all_genes has been set to TRUE.", quote=FALSE)}
+if(!is.logical(les_args$all_genes) | is.na(les_args$all_genes)) {les_args$all_genes <- TRUE ; print("Parameter all_genes has been set to TRUE.", quote=FALSE)}
 
 # Fonction standardisation 
 Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l_tables[[1]]){
