@@ -58,12 +58,6 @@ if(!require("edgeR", quietly=TRUE, character.only=TRUE)){
 library(MASS)
 
 
-### VERIFICATION DES PARAMETRES ENTRES PAR L'UTILISATEUR
-
-
-###
-
-
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){ 
 									
 	## si un seed a été entré, on le fixe
