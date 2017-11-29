@@ -77,7 +77,7 @@ Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l
 				       qn = data.matrix(normalize.quantiles.use.target(data.matrix(target), targ, copy=FALSE))
 				       output <- t(qn)
 				       rownames(output) <- rownames(dat)},
-		   {message("Unrecognised normalisation method: ", St, ". Standardisation method must be one of 'zscore', 'robust_zscore' or 'quantile'") ; return()})
+		   {message("Unrecognised standardisation method: ", St, ". Standardisation method must be one of 'zscore', 'robust_zscore' or 'quantile'") ; return()})
 	return(output)
 }
 
