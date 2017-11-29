@@ -136,9 +136,9 @@ Simulation.microarray=function(nGenes, n1, n2, pi0, up, muminde1, muminde2, rati
 	
 	## si on est en simulation de ratio, on retranche la ref (correspond à un ratio car on simule données en log)
     if (ratio) { 
-        xdata <- xdat[, 2:N] - xdat[, 1]
+        xdata <- xdat[, 2:N, drop=FALSE] - xdat[, 1]
     } else { # sinon on supprime la 1e colonne
-        xdata <- xdat[, 2:N]
+        xdata <- xdat[, 2:N, drop=FALSE]
     }
 	
 	list(xdata=xdata, xid=xid, xsd=xsd, delta=LFC)
