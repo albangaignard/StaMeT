@@ -6,7 +6,7 @@ Ce travail a été consacré à la simulation des données RNA-seq et microarray
 
 Il contient 3 modules:
 
-    #-microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affimetrix ».
+    --microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affimetrix ».
     -- rnaseq_simul : Permet de simuler les données de comptages RNAseq puis les normaliser. Nous proposons trois méthodes de normalisation des données RNAseq : DESeq2, edgeR , et VOOM.
     -- naseq_microarray_fusion : Permet de standardiser puis fusionner les deux  matrices des données simulées.  Nous proposont également trois méthodes de standardisation : Zscore, Zscore Robuste et la QN. 
 
@@ -21,6 +21,7 @@ Notre objectif est de combiner les deux technologies afin de réaliser des analy
 ...
 
 ## Usage in R scripts
+### 	microarray_simul.r
 ...
 
 ## Deployment and usage in Galaxy workflows
