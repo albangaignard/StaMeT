@@ -39,7 +39,11 @@ if(!require("DESeq2", quietly=TRUE, character.only=TRUE)){
 }
 
 
-if(! "preprocessCore" %in% pack_dispo) install.packages("preprocessCore", repos="https://cloud.r-project.org/")
+if(!require("preprocessCore", quietly=TRUE, character.only=TRUE)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("preprocessCore")           
+    library("preprocessCore", quietly=TRUE, character.only=TRUE)
+}
 if(! "clusterSim" %in% pack_dispo) install.packages("clusterSim", repos="https://cloud.r-project.org/")
 library("MASS")
 
