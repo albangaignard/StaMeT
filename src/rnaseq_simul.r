@@ -23,7 +23,7 @@ option_list = list(
 	make_option(c("-up", "--up_ratio"), type="numeric", default=0.5, 
               help="Proportion of up-regulated genes within differentially-expressed genes [default: %default]"),
 	make_option(c("-fc", "--fc_file"), type="character", default=NULL, 
-              help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details. [default: %default]"),			  
+              help="Path to text file with Fold-Change values for the simulated genes. See documentation for file structure details. [default: %default]"),			  
 	make_option(c("-rseq_n", "--rnaseq_norm"), type="character", default="DESeq2", 
               help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default: %default]"),
     make_option(c("-s", "--seed"), type="numeric", default=NULL, 
