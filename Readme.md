@@ -25,8 +25,10 @@ Notre objectif est de combiner les deux technologies afin de réaliser des analy
 Cette fonction permet de simuler des données microarrays à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affimetrix ».
 Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser ceux disponibles par défaut.
 #### Usage: 
+
 " microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
 #### Description des arguments
+
 •	"-gn" ou  "--gene_number": Un nombre entier naturel indiquant  le nombre de gènes dans les données simulées. La valeur par défaut est : --gene_number=10,000
 •	"-sn1" ou  "--samples_n1" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n1=75
 •	
