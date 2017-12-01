@@ -106,6 +106,9 @@ La fonction renvoie une matrice de données RNA-seq normalisé eavec respectivem
 
 ### 3. normalisation.rna_seq.r
 
+#### Description des arguments
+•	"-count" ou  "--count_file": matrice de comptage des données RNA-seq
+
 ## Deployment and usage in Galaxy workflows
 ...
 
