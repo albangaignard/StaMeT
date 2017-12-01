@@ -27,23 +27,12 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 1.1.3	Arguments
 
     •	"-gn" ou  "--gene_number": Un nombre entier naturel indiquant  le nombre de gènes dans les données simulées. La valeur par défaut est : --gene_number=10,000
-
-
-
     •	"-sn1" ou  "--samples_n1" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n1=75
-
-
-
     •	"-sn2" ou  "--samples_n2" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n2=75
-
     •   "-diff "ou  " --diff_genes_ratio" : Un nombre décimal indiquant le the pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est : --diff_genes_ratio=0.1
-
     •	"-up", ou "--up_ratio" : Un nombre décimal indiquant le pourcentage de gènes surexprimés. Sa valeur par défaut est : --up_ratio=0.5
-
     •	"-m1" ou "--m1": Un nombre décimal  correspondant à la différence moyenne entre la moyenne totale et la moyenne  des gènes différentiellement exprimé avec  des valeurs élevées. Sa valeur par défaut est : --m1=1.4
-
     •	"-m2" ou  "--m2": Un nombre décimal  correspondant à la différence moyenne entre la moyenne totale et la moyenne  des gènes différentiellement exprimé avec  des valeurs peu elevées. Sa valeur par défaut est : --m1=0.8
-
     •	"-s" ou "--seed": Un entier utilisé pour générer un nombre aléatoire par l'ordinateur
 
 
