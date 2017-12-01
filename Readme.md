@@ -89,7 +89,7 @@ Les données sont supposées  etre semblables aux données microarrays produites
 
 •	"-m1" ou "--m1": Un nombre décimal  correspondant à la différence moyenne entre la moyenne totale et la moyenne  des gènes différentiellement exprimé avec  des valeurs élevées. Sa valeur par défaut est : --m1=1.4
 
-•	"-fc" ou "--fc_file" :   Un fichier ‘txt’ contenant un vecteur FC (fc= "FC.txt"). Si aucun fichier n’est fourni....
+•	"-fc" ou "--fc_file" :   Un fichier ‘txt’ contenant un vecteur FC (fc= "FC.txt"). Si aucun fichier n’est fourni,Le vecteur des fold-change par défaut sera récupéré, soit tel quel, soit avec un échantiollnage pour avoir les bons nombres des génes DE et up
 
 •	"-rseq_n", "--rnaseq_norm" : Un caractère indiquant la méthode de normalisation des données RNA-seq souhaitée.  --rnaseq_norm=’’DESeq2 ‘’ est la valeur par défaut,  les alternatives à passer sont ‘’edgeR ‘’ et ‘’VOOM’’. 
 
@@ -99,6 +99,7 @@ Les données sont supposées  etre semblables aux données microarrays produites
 
 
 2.1.4	Plus de détails :
+A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir #### 1.c: Plus de détails)
 
 
 
