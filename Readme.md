@@ -39,9 +39,9 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 
 1.1.4	Plus de détails :
 
-- Si l’utilisateur fournit un nombre décimal au lieu d’un nombre  entier  pour les trois premiers paramètres, la valeur sera arrondie.
+-- Si l’utilisateur fournit un nombre décimal au lieu d’un nombre  entier  pour les trois premiers paramètres, la valeur sera arrondie.
 
-- La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
+-- La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
 
     •	Si un des paramètres numérique ne l’est pas
 
