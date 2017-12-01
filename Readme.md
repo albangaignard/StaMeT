@@ -2,14 +2,14 @@
 
 ## Description
 
-Ce travail a été consacré à la simulation des données RNA-seq et microarrays pour appliquer les normalisations et les standardisations à ces données simulées afin de pouvoir les combiner. 
+Cet outil permet de simulation des données RNA-seq et microarrays normalisées, de normaliser des données RNA-seq brutes (données de comptage) et de standardiser des données microarrays ou RNA-seq normalisées puis de les fusionner en un tableau unique. 
 
 Il contient 4 modules:
 
-    -- microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affimetrix ».
-    -- rnaseq_simul : Permet de simuler les données de comptages RNAseq puis les normaliser. Nous proposons trois méthodes de normalisation des données RNAseq : DESeq2, edgeR , et VOOM.
-    -- normalisation.rna_seq.r: Permet de normaliser les données RNA-seq. Nous proposons également trois méthodes de normalisation des données RNAseq : DESeq2, edgeR , et VOOM
-    -- naseq_microarray_fusion : Permet de standardiser puis fusionner les deux  matrices des données simulées.  Nous proposont également trois méthodes de standardisation : Zscore, Zscore Robuste et la QN. 
+    -- microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affymetrix ».
+    -- rnaseq_simul : Permet de simuler les données de comptages RNAseq puis de les normaliser. Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM.
+    -- normalisation.rna_seq.r: Permet de normaliser les données RNA-seq brutes (données de comptage). Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM
+    -- naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées.  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
     
     
 
