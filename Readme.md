@@ -98,10 +98,13 @@ Les données sont supposées  etre semblables aux données microarrays produites
 
 
 
-2.1.4	Plus de détails :
+#### 2.3	Plus de détails :
 A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir #### 1.c: Plus de détails)
 
+#### 2.4	Sortie
+La fonction renvoie une matrice de données RNA-seq normalisé eavec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 
+### 3. normalisation.rna_seq.r
 
 ## Deployment and usage in Galaxy workflows
 ...
