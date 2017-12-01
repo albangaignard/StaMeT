@@ -50,14 +50,20 @@ Plus de détails : Si l’utilisateur fournit un nombre décimal, sa valeur sera
 
 1.1.4	Plus de détails :
 
-Si l’utilisateur fournit un nombre décimal au lieu d’un nombre  entier  pour les trois premiers paramètres, la valeur sera arrondie. 
+Si l’utilisateur fournit un nombre décimal au lieu d’un nombre  entier  pour les trois premiers paramètres, la valeur sera arrondie.
+
 La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
 
 •	Si un des paramètres numérique ne l’est pas
+
 •	Si un des paramètres numériques est négatif 
+
 •	Si le nombre de gènes à simuler est nul
+
 •	Si le nombre d’échantillons est nul 
+
 •	Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
+
 
 
 1.1.5	Sortie 
