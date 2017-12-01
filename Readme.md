@@ -8,6 +8,7 @@
 
 
 I.	La simulation 
+
 Afin de pouvoir utiliser au mieux les outils d’analyses, quelques légères modifications ont été apportées aux fonctions de simulation prises en référence et ce, pour chacune des technologies. Ces modifications concernaient principalement l’organisation des matrices de données obtenues en sortie.
 
 1.	microarray_simul.r
