@@ -12,7 +12,7 @@ Il contient 3 modules:
 
 
 ## Motivations
-Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays) qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles. Et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Mais la structure de données et les distributions entre les plates-formes diffèrent. 
+Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays) qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles. Et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Cependant, la structure de données et les distributions entre les plates-formes diffèrent. 
 Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées. Pour cela...
 
 ...
