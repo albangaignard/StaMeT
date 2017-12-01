@@ -24,6 +24,7 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 " microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
 
 1.1.3	Arguments
+
 •	"-gn" ou  "--gene_number": Un nombre entier naturel indiquant  le nombre de gènes dans les données simulées. La valeur par défaut est : --gene_number=10,000
 
 Plus de détails : Si l’utilisateur fournit un nombre décimal, sa valeur sera arrondie.
