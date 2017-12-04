@@ -35,10 +35,9 @@ Pour cela, un plan d'action a été établi. Il consiste à réaliser un prétra
 
 Cette fonction permet de simuler des données microarrays à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affimetrix ».
 Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser ceux disponibles par défaut.
-#### 1.a: Usage: 
 
-" microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
-#### 1:b: Description des arguments
+
+#### 1:1: Description des arguments
 
 •	"-gn" ou  "--gene_number":              Un nombre entier naturel indiquant  le nombre de gènes dans les données simulées. La valeur par défaut est : --gene_number=10,000
 
@@ -55,7 +54,7 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 •	"-m2" ou  "--m2":                       Un nombre décimal  correspondant à la différence moyenne entre la moyenne totale et la moyenne  des gènes différentiellement exprimé avec  des valeurs peu elevées. Sa valeur par défaut est : --m1=0.8
 
 •	"-s" ou "--seed":                       Un entier utilisé pour générer un nombre aléatoire par l'ordinateur dans le but de rendre la simulation reproductible
-#### 1.c: Plus de détails 
+#### 1.2: Plus de détails 
 
 Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier  pour les trois premiers paramètres, la valeur sera arrondie. 
 La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
@@ -69,14 +68,16 @@ La fonction ne sera pas exécutée et retournera un message d’erreur dans les 
 •	Si le nombre d’échantillons est nul 
 
 •	Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
-#### 1.d: Sortie 
+#### 1.3: Sortie 
 La fonction renvoie une matrice de données avec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 Les données sont supposées  etre semblables aux données microarrays produites par la plateforme « Affimetrix » log2 intensité.
-### 2 	rnaseq_simul.r
-#### 2.1: Usage
+#### 1.4	Exécution de la fonction avec Rscript
 
--“rnaseq_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
-#### 2.2	Description des rguments
+RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
+
+### 2 	rnaseq_simul.r
+
+#### 2.1	Description des arguments
 •	"-gn" ou  "--gene_number": Un nombre entier naturel indiquant  le nombre de gènes dans les données simulées. La valeur par défaut est : --gene_number=10,000
 
 •	"-sn1" ou  "--samples_n1" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n1=75
@@ -96,16 +97,63 @@ Les données sont supposées  etre semblables aux données microarrays produites
 
 
 
-#### 2.3	Plus de détails :
-A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir #### 1.c: Plus de détails)
+#### 2.2	Plus de détails :
+A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir le paragraphe 1.2: Plus de détails)
 
-#### 2.4	Sortie
+#### 2.3	Sortie
 La fonction renvoie une matrice de données RNA-seq normalisé eavec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
+
+#### 2.4	Exécution de la fonction avec Rscript
+
+Rscript "\ rnasrq_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 
+
 
 ### 3. normalisation.rna_seq.r
 
-#### Description des arguments
+#### 3.1 Description des arguments
+
+
 •	"-count" ou  "--count_file": matrice de comptage des données RNA-seq
+
+•	"-des" ou "--design" : un fichier « txt » contenant un vecteur de condition en colonne  (variable qualitative) décrivant le plan de l’expérience (condition1/ condition2)
+
+•	"-rseq_n" ou  "--rnaseq_norm"  méthode de normalisation des données RNA –seq. --rnaseq_norm=’’DESeq2 ‘’ est la valeur par défaut,  les alternatives à passer sont ‘’edgeR ‘’ et ‘’VOOM’’. 
+
+#### 3.2	Sortie 
+
+La fonction renvoie une matrice de données RNA-seq normalisée suivant la méthode de normalisation choisie
+
+#### 3.3	Exécution de la fonction avec Rscript
+
+Rscript -“ \normalisation.rna_seq.r’ " --gene_number  --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
+
+### 4	rnaseq_microarray_fusion.r
+
+#### 4.1	Description des arguments
+
+•	"-stand" ou "--standardisation" : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut,  les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’
+
+•	-all"ou "--all_genes" : Un logique (TRUE, FALSE) indiquant si la fonction doit retourner tous les gènes ou bien renvoyer seulement les gènes en commun.--all_genes=TRUE par défaut.
+
+•	"-t" ou  "--tables" : Un vecteur de caractére contenant les noms des matrices des données à fusionner. Par défaut : "--tables"= " MicroArray_simulation.txt, RNASeq_simulation.txt"
+
+
+#### 4.2	Plus de détails 
+
+Un prétraitement est réalisé afin de rendre les données pertinentes et exploitables comme l’existence des doublons dans les noms de patients entre les tableaux. En effet, S'il y a des doublons, on ajoute un suffixe "_ti" au bout du nom.
+
+Aussi, la vérification de la nature des données. Ils  doivent être numériques, dans le cas contraire, ils seront transformés en données numériques. Puis une vérification des données manquantes est effectuée. Dans ce cas-là, la fonction s’arrête et renvoie un message d’erreur.
+
+#### 4.3	Sortie
+
+La fonction renvoie une matrice de données  fusionnées traitées avec la méthode de  standardisation choisie.
+
+####4.4	Execution avec Rscript
+
+Rscript  “\rnaseq_microarray_fusion.r " "--standardisation ’’zscore‘’   "--tables"  " MicroArray_simulation.txt, RNASeq_simulation.txt"
+
+
+
 
 ## Deployment and usage in Galaxy workflows
 ...
