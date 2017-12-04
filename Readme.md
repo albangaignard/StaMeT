@@ -21,7 +21,7 @@ Il contient 4 modules:
 Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Cependant, la structure de données et les distributions entre les plates-formes diffèrent. 
 Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées.
 
-Pour cela, un plan d'action a été établi. Il consiste à réaliser un prétraitement afin de rendre les données pertinentes et exploitables comme le filtrage de données et la vérification des données manquantesune méthode de normalisation des données de comptage a été appliquée afin de pouvoir corriger les biais techniques et rendre les comptages comparables entre échantillons. Enfin, une standardisation a été réalisée pour pouvoir combiner les deux matrices de données afin de réaliser des analyses sur les données fusionnées. Les différentes étapes essentielles de ce travail sont résumées 
+Pour cela, un plan d'action a été établi. Il consiste à réaliser un prétraitement afin de rendre les données pertinentes et exploitables comme le filtrage de données et la vérification des données manquantes. Une méthode de normalisation des données de comptage a été appliquée afin de pouvoir corriger les biais techniques et rendre les comptages comparables entre échantillons. Enfin, une standardisation a été réalisée pour pouvoir combiner les deux matrices de données afin de réaliser des analyses sur les données fusionnées. 
 
 
 
@@ -56,7 +56,7 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 •	"-s" ou "--seed":                       Un entier utilisé pour générer un nombre aléatoire par l'ordinateur dans le but de rendre la simulation reproductible
 #### 1.2: Plus de détails 
 
-Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier  pour les trois premiers paramètres, la valeur sera arrondie. 
+Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier pour les trois premiers paramètres, la valeur sera arrondie. 
 La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
 
 •	Si un des paramètres numérique ne l’est pas
@@ -101,7 +101,7 @@ RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 2
 A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir le paragraphe 1.2: Plus de détails)
 
 #### 2.3	Sortie
-La fonction renvoie une matrice de données RNA-seq normalisé eavec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
+La fonction renvoie une matrice de données RNA-seq normalisées avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 
 #### 2.4	Exécution de la fonction avec Rscript
 
