@@ -57,7 +57,7 @@ La fonction ne sera pas exécutée et retournera un message d’erreur dans les 
 
 La fonction renvoie une matrice de données avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 
-Les données sont supposées etre semblables aux données microarrays produites par la plateforme « Affymetrix » log2 intensité.
+Les données sont supposées etre semblables aux données microarrays produites par la plateforme « Affymetrix » après normalisation (log2 intensité).
 
 #####   2.1.4	Exécution avec Rscript
 
@@ -116,7 +116,7 @@ Rscript -“ \normalisation.rna_seq.r’ " --gene_number --samples_n1 20 --sampl
 
 -	"standardisation" : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut, les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’. 
 -	"all_genes" : Un logique (TRUE, FALSE) indiquant si la fonction doit retourner tous les gènes ou bien renvoyer seulement les gènes en commun. La valeur par défaut est TRUE.
--	"tables" : Une chaîne de caractère contenant les chemins vers les matrices de données à fusionner, séparés par des virgules. La valeur par défaut est "MicroArray_simulation.txt,RNA-seq_simulation.txt"
+-	"tables" : Une chaîne de caractère contenant les chemins vers les matrices de données normalisées à fusionner, séparés par des virgules. La valeur par défaut est "MicroArray_simulation.txt,RNA-seq_simulation.txt"
 
 
 
