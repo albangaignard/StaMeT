@@ -81,7 +81,7 @@ Cette fonction permet de simuler les données de comptages RNA-seq puis de les n
 
 A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. Voir paragraphe 2.1.2.
 
-#####   2.2.3	Sortie
+####   2.2.3	Sortie
 
 La fonction renvoie une matrice de données RNA-seq normalisée avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 
