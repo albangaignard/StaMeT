@@ -2,6 +2,10 @@
 
 ## 1    Description & Motivation
 
+Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. 
+
+Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées. Cependant, la nature des données issues de ces deux technologies diffèrent, ce qui qui rend leur combinaison  difficile.
+
 Cet outil permet de simuler des données RNA-seq et microarrays normalisées, de normaliser des données RNA-seq brutes (données de comptage) et de standardiser des données microarrays ou RNA-seq normalisées puis de les fusionner en un tableau unique. 
 
 Il contient 4 modules:
@@ -12,8 +16,6 @@ Il contient 4 modules:
 - naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées (réelles ou simulées).  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
     
 
-Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Cependant, la structure de données et les distributions entre les plates-formes diffèrent. 
-Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées.
 
  
 
