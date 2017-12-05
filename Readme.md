@@ -128,7 +128,7 @@ Aussi, la vérification de la nature des données. Ils doivent être numériques
 
 La fonction renvoie une matrice de données fusionnées traitées avec la méthode de standardisation choisie.
 
-#####   2.4.4	Execution avec Rscript
+####      2.4.4	Execution avec Rscript
 
 Rscript “\rnaseq_microarray_fusion.r" "--standardisation ’’zscore‘’ "--tables" " MicroArray_simulation.txt, RNASeq_simulation.txt"
 
