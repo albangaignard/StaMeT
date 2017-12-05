@@ -56,7 +56,7 @@ La fonction renvoie une matrice de données avec respectivement le nombre de lig
 
 Les données sont supposées etre semblables aux données microarrays produites par la plateforme « Affymetrix » log2 intensité.
 
-#####   2.1.4	Exécution de la fonction avec Rscript
+#####   2.1.4	Exécution avec Rscript
 
 RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
 
@@ -102,6 +102,7 @@ Cette fonction permet de normaliser les données RNA-seq brutes (données de com
 ####    2.3.2	Sortie 
 
 La fonction renvoie une matrice de données RNA-seq normalisée suivant la méthode de normalisation choisie
+
 ####    2.3.3	Exécution avec Rscript
 
 Rscript -“ \normalisation.rna_seq.r’ " --gene_number --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
