@@ -72,8 +72,8 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
     
 #### 1.3: Sortie 
 
-La fonction renvoie une matrice de données avec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
-Les données sont supposées  etre semblables aux données microarrays produites par la plateforme « Affimetrix » log2 intensité.
+La fonction renvoie une matrice de données avec respectivement  le nombre de lignes et de colonnes spécifiés par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
+Les données sont supposées  etre semblables aux données microarrays produites par la plateforme « Affymetrix » log2 intensité.
 #### 1.4	Exécution de la fonction avec Rscript
 
 RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
@@ -85,9 +85,9 @@ RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 2
 
 •	"-sn1" ou  "--samples_n1" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n1=75
 
-•	"-sn2" ou  "--samples_n2" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n2=75
+•	"-sn2" ou  "--samples_n2" : Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 2 (condition 2). La valeur par défaut est : --samples_n2=75
 
-•	"-diff "ou  " --diff_genes_ratio" : Un nombre décimal indiquant le the pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est : --diff_genes_ratio=0.1
+•	"-diff "ou  " --diff_genes_ratio" : Un nombre décimal indiquant le pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est : --diff_genes_ratio=0.1
 
 •	"-up", ou "--up_ratio" : Un nombre décimal indiquant le pourcentage de gènes surexprimés. Sa valeur par défaut est : --up_ratio=0.5
 
@@ -104,7 +104,7 @@ RScript " \microarray_simul.r" --gene_number 1000 --samples_n1 20 --samples_n2 2
 A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. (Voir le paragraphe 1.2: Plus de détails)
 
 #### 2.3	Sortie
-La fonction renvoie une matrice de données RNA-seq normalisées avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
+La fonction renvoie une matrice de données RNA-seq normalisées avec respectivement le nombre de lignes et de colonnes spécifiés par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 
 #### 2.4	Exécution de la fonction avec Rscript
 
