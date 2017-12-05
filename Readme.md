@@ -11,7 +11,8 @@ Il contient 4 modules:
     -- normalisation.rna_seq.r: Permet de normaliser les données RNA-seq brutes (données de comptage). Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM
     -- naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées (réelles ou simulées).  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
     
-    Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Cependant, la structure de données et les distributions entre les plates-formes diffèrent. 
+
+Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. Cependant, la structure de données et les distributions entre les plates-formes diffèrent. 
 Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées.
 
  
