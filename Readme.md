@@ -9,7 +9,7 @@ Il contient 4 modules:
     -- microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affymetrix ».
     -- rnaseq_simul : Permet de simuler les données de comptages RNAseq puis de les normaliser. Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM.
     -- normalisation.rna_seq.r: Permet de normaliser les données RNA-seq brutes (données de comptage). Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM
-    -- naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées.  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
+    -- naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées (réelles ou simulées).  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
     
     
 
@@ -43,9 +43,9 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 
 •	"-sn1" ou  "--samples_n1":              Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n1=75
 
-•	"-sn2" ou  "--samples_n2":              Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 1 (condition 1). La valeur par défaut est : --samples_n2=75
+•	"-sn2" ou  "--samples_n2":              Un nombre entier naturel indiquant le nombre d’échantillons  du phénotype 2 (condition 2). La valeur par défaut est : --samples_n2=75
 
-•   "-diff "ou  "--diff_genes_ratio":       Un nombre décimal indiquant le the pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est : --diff_genes_ratio=0.1
+•   "-diff "ou  "--diff_genes_ratio":       Un nombre décimal indiquant le pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est : --diff_genes_ratio=0.1
 
 •	"-up", ou "--up_ratio":                 Un nombre décimal indiquant le pourcentage de gènes surexprimés. Sa valeur par défaut est : --up_ratio=0.5
 
@@ -53,21 +53,22 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 
 •	"-m2" ou  "--m2":                       Un nombre décimal  correspondant à la différence moyenne entre la moyenne totale et la moyenne  des gènes différentiellement exprimé avec  des valeurs peu elevées. Sa valeur par défaut est : --m1=0.8
 
-•	"-s" ou "--seed":                       Un entier utilisé pour générer un nombre aléatoire par l'ordinateur dans le but de rendre la simulation reproductible
+•	"-s" ou "--seed":                       Un entier utilisé pour générer un nombre aléatoire dans le but de rendre la simulation reproductible
 #### 1.2: Plus de détails 
 
-Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier pour les trois premiers paramètres, la valeur sera arrondie. 
-La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
+- Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier pour les trois premiers paramètres, la valeur sera arrondie. 
+- La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
 
-•	Si un des paramètres numérique ne l’est pas
+    •	Si un des paramètres numérique ne l’est pas
 
-•	Si un des paramètres numériques est négatif 
+    •	Si un des paramètres numériques est négatif     
 
-•	Si le nombre de gènes à simuler est nul
+    •	Si le nombre de gènes à simuler est nul
 
-•	Si le nombre d’échantillons est nul 
+    •	Si le nombre d’échantillons est nul 
 
-•	Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
+    •	Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
+    
 #### 1.3: Sortie 
 La fonction renvoie une matrice de données avec respectivement  le nombre de lignes et de colonnes spécifié par les paramètres d'entrée "--gene_number et "--samples_n1 + "--samples_n2. 
 Les données sont supposées  etre semblables aux données microarrays produites par la plateforme « Affimetrix » log2 intensité.
