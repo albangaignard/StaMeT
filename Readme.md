@@ -59,9 +59,10 @@ Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser
 
 - Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier pour les trois premiers paramètres, la valeur sera arrondie. 
 - La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
--- 	Si un des paramètres numérique ne l’est pas
---	Si un des paramètres numériques est négatif     
---	Si le nombre de gènes à simuler est nul
+
+-# 	Si un des paramètres numérique ne l’est pas
+-#	Si un des paramètres numériques est négatif     
+-	Si le nombre de gènes à simuler est nul
 --	Si le nombre d’échantillons est nul 
 --  Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
     
