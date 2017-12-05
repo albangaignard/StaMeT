@@ -108,6 +108,7 @@ La fonction renvoie une matrice de données RNA-seq normalisée suivant la méth
 Rscript -“ \normalisation.rna_seq.r’ " --gene_number --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
 
 ### 2.4	‘’rnaseq_microarray_fusion.r‘’
+
 ####    2.4.1	Description des arguments
 
 -	"-stand" ou "--standardisation" : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut, les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’. 
@@ -128,6 +129,7 @@ Aussi, la vérification de la nature des données. Ils doivent être numériques
 La fonction renvoie une matrice de données fusionnées traitées avec la méthode de standardisation choisie.
 
 #####   2.4.4	Execution avec Rscript
+
 Rscript “\rnaseq_microarray_fusion.r" "--standardisation ’’zscore‘’ "--tables" " MicroArray_simulation.txt, RNASeq_simulation.txt"
 
 #   3	Bibliographie
