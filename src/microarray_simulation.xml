@@ -11,15 +11,18 @@
 
   <command interpreter="Rscript">
     microarray_simul.r
-    --gene_number $gene_number 
+    --gene_number $gene_number
     --samples_n1 $samples_n1
     --samples_n2 $samples_n2
     --up_ratio $up_ratio
     --diff_genes_ratio $diff_genes_ratio
     --m1 $m1
     --m2 $m2
+    #if $seed
+        --seed $seed
+    #end if
   </command>
-  
+
   <inputs>
     <param name="gene_number" type="integer" value="10000" label="Number of simulated genes" help="Total number of genes that are simulated [default value: 10000]"/>
     <param name="samples_n1" type="integer" value="75" label="Phenotype 1 samples" help="Number of samples with phenotype 1 [default value: 75]"/>
@@ -28,12 +31,7 @@
     <param name="diff_genes_ratio" type="float" value="0.1" label="ratio of significative p-values" help="proportion of differentially expressed genes (genes related to phenotype) within all genes [default value: 0.1]"/>
     <param name="m1" type="float" value="1.4" label="m1" help="average difference between global mean and phenotype mean for highly differentially expressed genes [default value: 1.4]"/>
     <param name="m2" type="float" value="0.8" label="m2" help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default vaule: 0.8]"/>
-    <!--<param name="rnaseq_norm" type="select" value="voom" label="normalization method" help="help message"> 
-          <option value="deseq2">deseq2</option>
-          <option value="voom">VOOM</option>
-          <option value="EdgeR">EdgeR</option>
-    </param>-->
-    <!--<param name="fold_change" type="data" format="tabular" label="fold change data" help="help message"/>-->
+    <param name="seed" type="integer" optional="true" label="Random seed" help="Seed value: can be set to make the simulation reproducible [optinal parameter]."/> 
   </inputs>
   <outputs>
     <data name="MicroArray_simulation" format="tabular" from_work_dir="MicroArray_simulation.txt" label="Simulated microarray expression" />
