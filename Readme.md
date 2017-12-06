@@ -145,3 +145,10 @@ Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_
 ...
 
 ## Software dependencies
+R packages :
+- optparse : https://CRAN.R-project.org/package=optparse
+- clusterSim : https://CRAN.R-project.org/package=clusterSim
+- edgeR : https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
+- DESeq2 : https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+- preprocessCore : https://www.bioconductor.org/packages/release/bioc/html/preprocessCore.html
+
