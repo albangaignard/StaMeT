@@ -111,9 +111,9 @@ Rscript normalisation.rna_seq.r --gene_number --samples_n1 20 --samples_n2 20 --
 
 ####    2.4.1	Description des arguments
 
--	"standardisation" : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut, les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’. 
--	"all_genes" : Un logique (TRUE, FALSE) indiquant si la fonction doit retourner tous les gènes ou bien renvoyer seulement les gènes en commun. La valeur par défaut est TRUE.
--	"tables" : Une chaîne de caractère contenant les chemins vers les matrices de données normalisées à fusionner, séparés par des virgules. La valeur par défaut est "MicroArray_simulation.txt,RNA-seq_simulation.txt"
+-	`standardisation` : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut, les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’. 
+-	`all_genes` : Un logique (TRUE, FALSE) indiquant si la fonction doit retourner tous les gènes ou bien renvoyer seulement les gènes en commun. La valeur par défaut est TRUE.
+-	`tables` : Une chaîne de caractère contenant les chemins vers les matrices de données normalisées à fusionner, séparés par des virgules. La valeur par défaut est "MicroArray_simulation.txt,RNA-seq_simulation.txt"
 
 ####    2.4.2	Plus de détails 
 
@@ -126,8 +126,9 @@ Aussi, la vérification de la nature des données. Ils doivent être numériques
 La fonction renvoie une matrice de données fusionnées traitées avec la méthode de standardisation choisie.
 
 ####      2.4.4	Execution avec Rscript
-
-Rscript “\rnaseq_microarray_fusion.r" "--standardisation ’’zscore‘’ "--tables" " MicroArray_simulation.txt, RNASeq_simulation.txt"
+```
+Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_simulation.txt, RNASeq_simulation.txt
+```
 
 #   3	Bibliographie
 1. Huber, Simon Anders and Wolfgang. Differential expression analysis for sequence count data. Genome Biology. 2010.
@@ -137,7 +138,6 @@ Rscript “\rnaseq_microarray_fusion.r" "--standardisation ’’zscore‘’ "-
 5. edgeR: Empirical Analysis of Digital Gene Expression Data in R. https://bioconductor.org/packages/release/bioc/html/edgeR.html. [En ligne] 
 6. Charity W Law, Yunshun Chen, Wei Shi and Gordon K Smyth. voom: precision weights unlock linear model analysis tools for RNA-seq read counts. Genome Biology. 15:R29, 2014.
 7. Limma: Linear Models for Microarray Data. http://bioconductor.org/packages/release/bioc/html/limma.html. [En ligne] 
-
 
 
 
