@@ -44,12 +44,9 @@ if(!require("preprocessCore", quietly=TRUE, character.only=TRUE)){
     biocLite("preprocessCore")           
     library("preprocessCore", quietly=TRUE, character.only=TRUE)
 }
-if(! "clusterSim" %in% pack_dispo) install.packages("clusterSim", repos="https://cloud.r-project.org/")
+
 library("MASS")
-
-
 library("preprocessCore")
-library("clusterSim")
 
 
 meth <- les_args$standardisation
@@ -71,9 +68,13 @@ Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l
 	## Vérification que les données sont numériques
 	if (!is.numeric(dat)){NA_dat <- is.na(dat); dat <- as.numeric(dat); if(any(is.na(dat)!=NA_dat)){message("Data must be numeric. See documentation for details.") ; return()}}
 	
+	tdat <- t(dat)
+	
 	switch(St, 
-           "zscore"={output <- data.Normalization(dat, type="n1", normalization="row")},
-		   "robust_zscore"={output <- data.Normalization(dat, type="n2", normalization="row")},
+           "zscore"={output <- t(scale(tdat)); attr(output, "scaled:center") <- attr(output, "scaled:scale") <- NULL},
+		   "robust_zscore"={meds <- apply(tdat, 2, median)
+		                    mads <- apply(tdat, 2, mad)
+		                    output <- t(scale(tdat, center=meds, scale=mads)); attr(output, "scaled:center") <- attr(output, "scaled:scale") <- NULL},
 		   "quantile"={ref <- data.frame(t(Ref))
 				       target <- data.frame(t(dat))
 				       targ <- normalize.quantiles.determine.target(data.matrix(ref), target.length=nrow(ref))
