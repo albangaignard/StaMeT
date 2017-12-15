@@ -72,8 +72,8 @@ Standardisation=function(dat, St=c("zscore", "robust_zscore", "quantile"), Ref=l
 	
 	switch(St, 
            "zscore"={output <- t(scale(tdat)); attr(output, "scaled:center") <- attr(output, "scaled:scale") <- NULL},
-		   "robust_zscore"={meds <- apply(tdat, 2, median)
-		                    mads <- apply(tdat, 2, mad)
+		   "robust_zscore"={meds <- apply(tdat, 2, median, na.rm=TRUE)
+		                    mads <- apply(tdat, 2, mad, na.rm=TRUE)
 		                    output <- t(scale(tdat, center=meds, scale=mads)); attr(output, "scaled:center") <- attr(output, "scaled:scale") <- NULL},
 		   "quantile"={ref <- data.frame(t(Ref))
 				       target <- data.frame(t(dat))
