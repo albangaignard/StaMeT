@@ -55,7 +55,11 @@ if(!require("edgeR", quietly=TRUE, character.only=TRUE)){
     library("edgeR", quietly=TRUE, character.only=TRUE)
 }
 
-library(MASS)
+if(!require("MASS", quietly=TRUE, character.only=TRUE)){
+    source("http://bioconductor.org/biocLite.R")                  
+    biocLite("MASS")           
+    library("MASS", quietly=TRUE, character.only=TRUE)
+}
 
 
 counts.simulation <- function(nGenes, n1, n2, pi0, up, fc, seed=NULL){ 
