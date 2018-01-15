@@ -9,29 +9,33 @@
     <edam_operation>operation_3434</edam_operation>
 </edam_operations>
 
+<requirements>
+    <requirement type="package" version="0.1.0">rnanormtb</requirement>
+</requirements>
+
   <command interpreter="Rscript">
     rnaseq_simul.r
-    --gene_number $gene_number 
+    --gene_number $gene_number
     --samples_n1 $samples_n1
     --samples_n2 $samples_n2
     --up_ratio $up_ratio
     --diff_genes_ratio $diff_genes_ratio
-    
+
     #if $fc
     --fc_file $fc
-    #else 
+    #else
     --fc_file $__tool_directory__/FC.txt
     #end if
-    
+
     --rnaseq_norm $rnaseq_norm
-    
+
     #if $seed
         --seed $seed
     #end if
   </command>
 
    <inputs>
-      
+
       <param name="gene_number" type="integer" value="10000" label="Number of simulated genes" help="Total number of genes that are simulated [default value: 10000]"/>
 
       <param name="samples_n1" type="integer" value="75" label="Phenotype 1 samples" help="Number of samples with phenotype 1 [default value: 75]"/>
@@ -42,19 +46,19 @@
 
       <param name="diff_genes_ratio" type="float" value="0.1" label="ratio of significative p-values" help="proportion of differentially expressed genes (genes related to phenotype) within all genes [default value: 0.1]"/>
 
-      <param name="rnaseq_norm" type="select" value="DESeq2" label="Normalization method" help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default value: DESeq2]"> 
+      <param name="rnaseq_norm" type="select" value="DESeq2" label="Normalization method" help="Normalisation method for count data, possible values: DESeq2, edgeR, VOOM. [default value: DESeq2]">
           <option value="DESeq2">DESeq2</option>
           <option value="edgeR">edgeR</option>
           <option value="VOOM">VOOM</option>
       </param>
 
-      <param name="fc" optional="true" type="data" format="tabular" label="Fold change" help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details [optinal parameter]."/> 
+      <param name="fc" optional="true" type="data" format="tabular" label="Fold change" help="Text file with Fold-Change values for the simulated genes. See documentation for file structure details [optinal parameter]."/>
 
-      <param name="seed" type="integer" optional="true" label="Random seed" help="Seed value: can be set to make the simulation reproducible [optinal parameter]."/> 
+      <param name="seed" type="integer" optional="true" label="Random seed" help="Seed value: can be set to make the simulation reproducible [optinal parameter]."/>
   </inputs>
-  
+
   <outputs>
     <data name="RNAseq_simulation" format="tabular" from_work_dir="RNAseq_simulation.txt" label="Simulated RNAseq expression"/>
-  </outputs> 
+  </outputs>
 
 </tool>

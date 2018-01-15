@@ -9,6 +9,10 @@
     <edam_operation>operation_3434</edam_operation>
 </edam_operations>
 
+<requirements>
+    <requirement type="package" version="0.1.0">rnanormtb</requirement>
+</requirements>
+
   <command interpreter="Rscript">
     microarray_simul.r
     --gene_number $gene_number
@@ -31,7 +35,7 @@
     <param name="diff_genes_ratio" type="float" value="0.1" label="ratio of significative p-values" help="proportion of differentially expressed genes (genes related to phenotype) within all genes [default value: 0.1]"/>
     <param name="m1" type="float" value="1.4" label="m1" help="average difference between global mean and phenotype mean for highly differentially expressed genes [default value: 1.4]"/>
     <param name="m2" type="float" value="0.8" label="m2" help="average difference between global mean and phenotype mean for weakly differentially expressed genes [default vaule: 0.8]"/>
-    <param name="seed" type="integer" optional="true" label="Random seed" help="Seed value: can be set to make the simulation reproducible [optinal parameter]."/> 
+    <param name="seed" type="integer" optional="true" label="Random seed" help="Seed value: can be set to make the simulation reproducible [optinal parameter]."/>
   </inputs>
   <outputs>
     <data name="MicroArray_simulation" format="tabular" from_work_dir="MicroArray_simulation.txt" label="Simulated microarray expression" />
@@ -47,5 +51,4 @@
   <help>
 
   </help>
-
 </tool>

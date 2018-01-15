@@ -9,19 +9,23 @@
     <edam_operation>operation_3434</edam_operation>
 </edam_operations>
 
+<requirements>
+    <requirement type="package" version="0.1.0">rnanormtb</requirement>
+</requirements>
+
   <command interpreter="Rscript">
     rnaseq_microarray_fusion.r
-    --tables 
+    --tables
     ${",".join(map(str, $tables))}
     --standardisation $standardisation
     --all_genes $all_genes
   </command>
-  
-  
+
+
   <inputs>
     <param name="tables" type="data" format="tabular" multiple="true" label="Gene expression tables"/>
 
-    <param name="standardisation" type="select" value="zscore" label="Standardisation method" help="Standardisation method, possible values: zscore, quantile, robust_zscore [default value: zscore]"> 
+    <param name="standardisation" type="select" value="zscore" label="Standardisation method" help="Standardisation method, possible values: zscore, quantile, robust_zscore [default value: zscore]">
           <option value="zscore">zscore</option>
           <option value="quantile">quantile</option>
           <option value="robust_zscore">robust_zscore</option>
