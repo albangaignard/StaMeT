@@ -1,62 +1,58 @@
 # Multi-transcripts toolbox
 
-## 1    Description & Motivation
+## I.	Description and Motivation
 
-Plusieurs approches permettent de mesurer l’expression génique. Il y a la technologie des puces à ADN (microarrays), qui reste jusqu’à aujourd’hui la plus utilisée d’entre elles, et le séquençage d’ARN qui devient la technologie de choix pour les nouvelles expériences. 
+Several approaches exist for studying and measuring gene expression. Microarrays, which is still the most used, and RNA sequencing, which are gaining ground and becoming the technology of choice for new experiments.
+The aim is to perform statistical analysis on merged data from these two technologies, despite their differences in structure and nature. 
 
-Notre objectif est de combiner les deux technologies afin de réaliser des analyses sur les données fusionnées. Cependant, la nature des données issues de ces deux technologies diffèrent, ce qui qui rend leur combinaison  difficile.
+This tool can simulate RNA-seq and microarrays normalized data, normalize raw RNA-seq data (count data), and standardize microarrays and/or RNA-seq data and then merge into a single data set.
+It contains 4 modules:
 
-Cet outil permet de simuler des données RNA-seq et microarrays normalisées, de normaliser des données RNA-seq brutes (données de comptage) et de standardiser des données microarrays ou RNA-seq normalisées puis de les fusionner en un tableau unique. 
+-	microarray_simul.r: it allows to generate microarrays data. The simulated data have similar characteristics compared to the microarrays data produced by the Affymetrix® platform, after normalization;
+-	rnaseq_simul.r: it allows to simulate the RNA-seq count data and then normalizes them. There are three normalization methods implemented: DESeq2, edgeR, and VOOM;
+-	normalisation.rna_seq.r: it allows to normalize RNA-seq count data. Three normalization methods are available: DESeq2, edgeR and VOOM;
+-	rnaseq_microarray_fusion.r: it allows to standardize and then merge standardized RNA-seq and/or microarrays data (real or simulated). Three standardization methods are available: Z-score, Z-score Robust and Quantile Normalization.
 
-Il contient 4 modules:
 
-- microarray_simul : Permet de simuler les  données microarrays  à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affymetrix », après normalisation.
-- rnaseq_simul : Permet de simuler les données de comptages RNAseq puis de les normaliser. Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM.
-- normalisation.rna_seq.r: Permet de normaliser les données RNA-seq brutes (données de comptage). Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM
-- naseq_microarray_fusion : Permet de standardiser puis fusionner des matrices de données RNA-seq ou microarrays normalisées (réelles ou simulées).  Trois méthodes de standardisation sont disponilbles : Zscore, Zscore Robuste et la Quantile Normalisation. 
-    
+## II.	Deployment and usage in R 
 
-## 2	Utilisation sous R 
+### II.1	 “microarray_simul.r”
 
-### 2.1	“microarray_simul.r”
-
-Cette fonction permet de simuler des données microarrays à partir d’un modèle prédéfini. Les données simulées ont un comportement similaire aux données microarrays produites par la plateforme « Affymetrix » puis normalisées.
-Pour cela, l’utilisateur doit fournir un ensemble des paramètres, ou utiliser ceux disponibles par défaut.
+This function allows to generate microarrays data with two conditions and known characteristics. These data have similar behavior as those obtained with Affymetrix® platform, after normalization (Log2 intensity).
 
 
 
-####    2.1.1	Description des arguments
+####    II.1.1	 Arguments
+-	gene_number: an integer specifying the number of genes to be simulated. Default to 10,000;
+-	samples_n1: an integer specifying the number of phenotype 1 (condition 1) samples to be simulated. Default to 75;
+-	samples_n2: an integer specifying the number of phenotype 2 (condition 2) samples to be simulated. Default to 75;
+-	diff_genes_ratio: the proportion of differentially expressed genes. Default to 0.1;
+-	up_ratio: the proportion of up-regulated genes among differentially expressed genes. Default to 0.5;
+-	m1: a decimal number corresponding to average expression difference between condition 2 and condition 1. Default to 1.4;
+-	m2: similar to m1, it allows to have 2 levels of difference, for example high and moderate. Default to 0.8;
+-	seed: an integer used as seed for generating random number, it permits to generate reproducible data. By default, none is set.
 
--	`gene_number`: Un nombre entier naturel indiquant le nombre de gènes dans les données simulées. La valeur par défaut est 10000
--	`samples_n1`: Un nombre entier naturel indiquant le nombre d’échantillons du phénotype 1 (condition 1). La valeur par défaut est 75
--	`samples_n2`: Un nombre entier naturel indiquant le nombre d’échantillons du phénotype 2 (condition 2). La valeur par défaut est 75
--	`diff_genes_ratio`: Un nombre décimal indiquant le pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est 0.1
--	`up_ratio`: Un nombre décimal indiquant le pourcentage de gènes surexprimés. Sa valeur par défaut est 0.5
--	`m1`: Un nombre décimal correspondant à la différence moyenne entre la moyenne totale et la moyenne des gènes différentiellement exprimé avec des valeurs élevées. Sa valeur par défaut est 1.4
--	`m2`: Un nombre décimal correspondant à la différence moyenne entre la moyenne totale et la moyenne des gènes différentiellement exprimé avec des valeurs peu élevées. Sa valeur par défaut est 0.8
--	`seed`: Un entier utilisé pour générer un nombre aléatoire par l'ordinateur dans le but de rendre la simulation reproductible
+####    II.1.2	Note and details
 
-####    2.1.2	 Plus de détails 
+If the user supplies a decimal number instead of an integer for the first three parameters, the value will be rounded.
+The function will not run and will return error messages in the following cases:
 
-Si l’utilisateur fournit un nombre décimal au lieu d’un nombre entier pour les trois premiers paramètres, la valeur sera arrondie. 
-
-La fonction ne sera pas exécutée et retournera un message d’erreur dans les cas suivant :
--	Si un des paramètres numérique ne l’est pas
--	Si un des paramètres numériques est négatif 
--	Si le nombre de gènes à simuler est nul
--	Si le nombre d’échantillons est nul 
--	Si les deux paramètres de proportions ne sont pas compris entre 0 et 1
+-	one of the numeric parameters is not numeric;
+-	one of the integer parameters is negative; 
+-	the number of genes to be simulated is zero;
+-	the number of samples is zero;
+-	at least one proportion parameter is not between 0 and 1.
 
 
-####    2.1.3	Sortie 
 
-La fonction renvoie une matrice de données avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée `--gene_number` et `--samples_n1` + `--samples_n2`. 
+####    II.1.3	Value
+The output is a tab-delimited text file containing a dataset with gene_number rows and (samples_n1+samples_n2+1) columns. The first column contains gene names. First ones are the up–regulated genes, then down-regulated genes, then the genes that are not differentially expressed. 
 
-Les données sont supposées etre semblables aux données microarrays produites par la plateforme « Affymetrix » après normalisation (log2 intensité).
 
-#####   2.1.4	Exécution avec Rscript
-```
-RScript microarray_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8
+#####   II.1.4	Usage in Rscript
+
+RScript microarray_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8 --seed 123
+
 ```
 
 ###     2.2	“	rnaseq_simul.r”
