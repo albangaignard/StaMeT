@@ -53,78 +53,76 @@ The output is a tab-delimited text file containing a dataset with gene_number ro
 
 RScript microarray_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 –m1 1.4 --m2 0.8 --seed 123
 
-```
-
-###     2.2	“	rnaseq_simul.r”
-
-Cette fonction permet de simuler les données de comptages RNA-seq puis de les normaliser. Trois méthodes de normalisation des données RNA-seq sont disponibles : DESeq2 (1) (2) (3), edgeR (4) (5) et VOOM (6) (7).
-
-####    2.2.1	Description des arguments
-
--	`gene_number`: Un nombre entier naturel indiquant le nombre de gènes dans les données simulées. La valeur par défaut est 10000
--	`samples_n1` : Un nombre entier naturel indiquant le nombre d’échantillons du phénotype 1 (condition 1). La valeur par défaut est 75
--	`samples_n2` : Un nombre entier naturel indiquant le nombre d’échantillons du phénotype 2 (condition 2). La valeur par défaut est 75
--	`diff_genes_ratio` : Un nombre décimal indiquant le pourcentage des gènes différentiellement exprimés. Sa valeur par défaut est 0.1
--	`up_ratio` : Un nombre décimal indiquant le pourcentage de gènes surexprimés. Sa valeur par défaut est 0.5
--	`fc_file` : Le chemin vers un fichier contenant un vecteur de fold-changes en colonne, avec une en-tête. Si aucun fichier n’est fourni, le vecteur des fold-changes par défaut sera pris, soit tel quel, soit avec un échantillonnage pour avoir les bons nombres des gènes DE et up
--	`rnaseq_norm` : Un caractère indiquant la méthode de normalisation des données RNA-seq souhaitée. "DESeq2" est la valeur par défaut, les alternatives "edgeR" et "VOOM". 
--	`seed` : Un entier utilisé pour générer un nombre aléatoire par l'ordinateur dans le but de rendre la simulation reproductible
 
 
+###    II.2	“rnaseq_simul.r”
+This function is used to simulate RNA-seq count data and to normalize them. Three normalization methods are available: DESeq2    , edgeR   and VOOM  .
 
-####    2.2.2	Plus de détails :
+####    II.2.1	Arguments
 
-A l'instar de la fonction "microarray_simul.r", des vérifications seront faites. Voir paragraphe 2.1.2.
+-	gene_number: an integer specifying the number of genes to be simulated. Default to 10,000;
+-	samples_n1: an integer specifying the number of phenotype 1 (condition 1) samples to be simulated. Default to 75;
+-	samples_n2: an integer specifying the number of phenotype 2 (condition 2) samples to be simulated. Default to 75;
+-	diff_genes_ratio: the proportion of differentially expressed genes. Default to 0.1;
+-	up_ratio: the proportion of up-regulated genes among differentially expressed genes. Default to 0.5;
+-	fc_file: The path to a text file containing fold-changes in column, with a header. If no file is provided, the default fold-changes will be taken, either as is, or with a random sampling to get the right number of DE and up-regulated genes; 
+-	rnaseq_norm: a character indicating the normalization method for RNA-seq. Available methods are “DESeq2”, “edgeR” and “VOOM”. Default to “DESeq2”;
+-	seed: an integer used as seed for generating random number, it permits to generate reproducible data. By default, none is set.
 
-####   2.2.3	Sortie
+####    II.2.2	Note and details
 
-La fonction renvoie une matrice de données RNA-seq normalisée avec respectivement le nombre de lignes et de colonnes spécifié par les paramètres d'entrée `--gene_number` et `--samples_n1` + `--samples_n2`. 
+Similar checks as for function “microarray_simul.r” will be made. See section II.1.2.
 
-####    2.2.4	Exécution avec Rscript
-```
-Rscript rnasrq_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 
-```
+####    II.2.3	Value
+The output is a tab-delimited text file containing a dataset with gene_number rows and (samples_n1+samples_n2+1) columns. The first column contains gene names, first ones are the up–regulated genes, then down-regulated genes, then the genes that are not differentially expressed. 
 
-### 2.3	‘’ normalisation.rna_seq.r’’
+####    II.2.4	Usage in Rscript
+Rscript rnasrq_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 --seed 123
 
-Cette fonction permet de normaliser les données RNA-seq brutes (données de comptage). Trois méthodes de normalisation des données RNAseq sont disponibles : DESeq2, edgeR et VOOM
+II.3	 “normalisation.rna_seq.r”
+It allows normalization of RNA-seq count data. Three methods are available: DESeq2, edgeR and VOOM.
 
-####    2.3.1	Description des arguments
+II.3.1	Arguments
+•	count_file: a path to tab-delimited text file containing a matrix of non-negative integers;
+•	design: a path to a text file containing a condition vector in column (qualitative variable) describing the plan of the experiment (condition1 / condition2), samples need to be in same order as in count_file;
+•	rnaseq_norm: a character indicating the normalization method for RNA-seq. Available methods are “DESeq2”, “edgeR” and “VOOM”. Default to “DESeq2”.
+II.3.2	Value
+The function returns a tab-delimited text file containing the normalized RNA-seq data matrix according to the chosen normalization method. The output matrix has the same dimensions as the input matrix. Also, they have the same names of rows and columns.
 
--	`count_file` : matrice de comptage des données RNA-seq
--	`design` : un fichier « txt » contenant un vecteur de condition en colonne (variable qualitative) décrivant le plan de l’expérience (condition1/ condition2)
--	`rnaseq_norm` : méthode de normalisation des données RNA –seq. "DESeq2" est la valeur par défaut, les alternatives sont "edgeR" et "VOOM". 
-
-####    2.3.2	Sortie 
-
-La fonction renvoie une matrice de données RNA-seq normalisée suivant la méthode de normalisation choisie
-
-####    2.3.3	Exécution avec Rscript
-```
+II.3.3	Usage in Rscript
 Rscript normalisation.rna_seq.r --gene_number --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
-```
-### 2.4	‘’rnaseq_microarray_fusion.r‘’
 
-####    2.4.1	Description des arguments
+II.4	 “rnaseq_microarray_fusion.r”
+II.4.1	Arguments
+•	standardisation: a character indicating the standardization method. Available methods are zscore, robust_zscore and quantile. Default to zscore ;
+•	all_genes: a logical parameter indicating whether the function should return all genes or just the one in common. Default to TRUE;
+•	tables: a character string containing the paths to the datasets to be standardized and merge, separated by commas. The default value is “MicroArray_simulation.txt,RNA-seq_simulation.txt”.
 
--	`standardisation` : méthode de standardisation. --standardisation=’’zscore‘’ est la valeur par défaut, les alternatives à passer sont ‘robust_zscore ‘’ et ‘quantil’. 
--	`all_genes` : Un logique (TRUE, FALSE) indiquant si la fonction doit retourner tous les gènes ou bien renvoyer seulement les gènes en commun. La valeur par défaut est TRUE.
--	`tables` : Une chaîne de caractère contenant les chemins vers les matrices de données normalisées à fusionner, séparés par des virgules. La valeur par défaut est "MicroArray_simulation.txt,RNA-seq_simulation.txt"
+II.4.2	Note and details
+The function will perform a pretreatment process to make the data usable:
+•	Check if some patient’s names are shared between datasets. if there are any duplicate, we add a suffix (“_ti”, where i indicates the ith dataset) at the end of the name;
+•	Check the nature of data: if the data are not numeric, the function halts and an error is produced.
 
-####    2.4.2	Plus de détails 
+II.4.3	Value
+The function returns a tab-delimited text file containing the matrix of merged data processed with the chosen standardization method.
+The number of columns of the output data is equal to the sum of total samples plus one. The first column contains gene names. The number of rows depends on whether user wants to keep all genes or only common genes.
 
-Un prétraitement est réalisé afin de rendre les données pertinentes et exploitables comme l’existence des doublons dans les noms de patients entre les tableaux. En effet, S'il y a des doublons, on ajoute un suffixe "_ti" au bout du nom.
+II.4.4	Usage in Rscript
+Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_simulation.txt,RNASeq_simulation.txt
+ 
+III.	Deployment and usage in Galaxy workflows
 
-Aussi, la vérification de la nature des données. Ils doivent être numériques, dans le cas contraire, ils seront transformés en données numériques. Puis une vérification des données manquantes est effectuée. Dans ce cas-là, la fonction s’arrête et renvoie un message d’erreur.
+To use Galaxy , you must create a user account on the computing cluster of BiRD platform: http://www.pf-bird.univ-nantes.fr/demande-de-compte-birdcluster-1354976.kjsp?RH=1442585061597
 
-####    2.4.3	Sortie
+IV.	Software dependencies
+R packages:
+•	optparse: https://CRAN.R-project.org/package=optparse
+•	edgeR: https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
+•	DESeq2: https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+•	preprocessCore: https://www.bioconductor.org/packages/release/bioc/html/preprocessCore.html
 
-La fonction renvoie une matrice de données fusionnées traitées avec la méthode de standardisation choisie.
 
-####      2.4.4	Execution avec Rscript
-```
-Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_simulation.txt, RNASeq_simulation.txt
-```
+
 
 #   3	Bibliographie
 1. Huber, Simon Anders and Wolfgang. Differential expression analysis for sequence count data. Genome Biology. 2010.
