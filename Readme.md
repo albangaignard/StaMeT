@@ -79,69 +79,64 @@ The output is a tab-delimited text file containing a dataset with gene_number ro
 ####    II.2.4	Usage in Rscript
 Rscript rnasrq_simul.r --gene_number 1000 --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1 --seed 123
 
-II.3	 “normalisation.rna_seq.r”
+### II.3	 “normalisation.rna_seq.r”
 It allows normalization of RNA-seq count data. Three methods are available: DESeq2, edgeR and VOOM.
 
-II.3.1	Arguments
-•	count_file: a path to tab-delimited text file containing a matrix of non-negative integers;
-•	design: a path to a text file containing a condition vector in column (qualitative variable) describing the plan of the experiment (condition1 / condition2), samples need to be in same order as in count_file;
-•	rnaseq_norm: a character indicating the normalization method for RNA-seq. Available methods are “DESeq2”, “edgeR” and “VOOM”. Default to “DESeq2”.
-II.3.2	Value
+####    II.3.1	Arguments
+-	count_file: a path to tab-delimited text file containing a matrix of non-negative integers;
+-	design: a path to a text file containing a condition vector in column (qualitative variable) describing the plan of the experiment (condition1 / condition2), samples need to be in same order as in count_file;
+-	rnaseq_norm: a character indicating the normalization method for RNA-seq. Available methods are “DESeq2”, “edgeR” and “VOOM”. Default to “DESeq2”.
+
+####    II.3.2	Value
 The function returns a tab-delimited text file containing the normalized RNA-seq data matrix according to the chosen normalization method. The output matrix has the same dimensions as the input matrix. Also, they have the same names of rows and columns.
 
-II.3.3	Usage in Rscript
+####    II.3.3	Usage in Rscript
 Rscript normalisation.rna_seq.r --gene_number --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
 
-II.4	 “rnaseq_microarray_fusion.r”
-II.4.1	Arguments
-•	standardisation: a character indicating the standardization method. Available methods are zscore, robust_zscore and quantile. Default to zscore ;
-•	all_genes: a logical parameter indicating whether the function should return all genes or just the one in common. Default to TRUE;
-•	tables: a character string containing the paths to the datasets to be standardized and merge, separated by commas. The default value is “MicroArray_simulation.txt,RNA-seq_simulation.txt”.
+### II.4	 “rnaseq_microarray_fusion.r”
+####    II.4.1	Arguments
+-	standardisation: a character indicating the standardization method. Available methods are zscore, robust_zscore and quantile. Default to zscore ;
+-	all_genes: a logical parameter indicating whether the function should return all genes or just the one in common. Default to TRUE;
+-	tables: a character string containing the paths to the datasets to be standardized and merge, separated by commas. The default value is “MicroArray_simulation.txt,RNA-seq_simulation.txt”.
 
-II.4.2	Note and details
+####    II.4.2	Note and details
 The function will perform a pretreatment process to make the data usable:
-•	Check if some patient’s names are shared between datasets. if there are any duplicate, we add a suffix (“_ti”, where i indicates the ith dataset) at the end of the name;
-•	Check the nature of data: if the data are not numeric, the function halts and an error is produced.
+-	Check if some patient’s names are shared between datasets. if there are any duplicate, we add a suffix (“_ti”, where i indicates the ith dataset) at the end of the name;
+-	Check the nature of data: if the data are not numeric, the function halts and an error is produced.
 
-II.4.3	Value
+####    II.4.3	Value
 The function returns a tab-delimited text file containing the matrix of merged data processed with the chosen standardization method.
 The number of columns of the output data is equal to the sum of total samples plus one. The first column contains gene names. The number of rows depends on whether user wants to keep all genes or only common genes.
 
-II.4.4	Usage in Rscript
+####    II.4.4	Usage in Rscript
 Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_simulation.txt,RNASeq_simulation.txt
- 
-III.	Deployment and usage in Galaxy workflows
+
+
+##  III.	Deployment and usage in Galaxy workflows
 
 To use Galaxy , you must create a user account on the computing cluster of BiRD platform: http://www.pf-bird.univ-nantes.fr/demande-de-compte-birdcluster-1354976.kjsp?RH=1442585061597
 
 IV.	Software dependencies
 R packages:
-•	optparse: https://CRAN.R-project.org/package=optparse
-•	edgeR: https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
-•	DESeq2: https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
-•	preprocessCore: https://www.bioconductor.org/packages/release/bioc/html/preprocessCore.html
+-	optparse: https://CRAN.R-project.org/package=optparse
+-	edgeR: https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
+-	DESeq2: https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
+-	preprocessCore: https://www.bioconductor.org/packages/release/bioc/html/preprocessCore.html
 
 
 
 
 #   3	Bibliographie
-1. Huber, Simon Anders and Wolfgang. Differential expression analysis for sequence count data. Genome Biology. 2010.
-2. Simon Anders, Wolfgang Huber. Differential expression of RNA-Seq data at the gene level – the DESeq package. Last revision 2016-01-12.
-3. DESeq2paper. [http://www-huber.embl.de/DESeq2paper]. [En ligne] 
-4. Robinson MD, McCarthy DJ, Smyth GK. edgeR: a Bioconductor package for differential expression analysis of digital gene expression data. Bioinformatics. 2010.
-5. edgeR: Empirical Analysis of Digital Gene Expression Data in R. https://bioconductor.org/packages/release/bioc/html/edgeR.html. [En ligne] 
-6. Charity W Law, Yunshun Chen, Wei Shi and Gordon K Smyth. voom: precision weights unlock linear model analysis tools for RNA-seq read counts. Genome Biology. 15:R29, 2014.
-7. Limma: Linear Models for Microarray Data. http://bioconductor.org/packages/release/bioc/html/limma.html. [En ligne] 
+ - S Anders and W Huber. Differential expression analysis for sequence count data. Genome Biology 2010;11:R106.
+
+ - S Anders, W Huber. Differential expression of RNA-Seq data at the gene level – the DESeq package. Last revision 2016-01-12.
+ - DESeq2paper. [http://www-huber.embl.de/DESeq2paper]. [En ligne] 
+ - MD Robinson, DJ McCarthy, GK Smyth. edgeR: a Bioconductor package for differential expression analysis of digital gene expression data. Bioinformatics. 2010
+
+ - edgeR: Empirical Analysis of Digital Gene Expression Data in R. https://bioconductor.org/packages/release/bioc/html/edgeR.html. [En ligne] 
+ - Charity W Law, Yunshun Chen, Wei Shi and Gordon K Smyth. voom: precision weights unlock linear model analysis tools for RNA-seq read counts. Genome Biology. 15:R29, 2014.
+ - Limma: Linear Models for Microarray Data. http://bioconductor.org/packages/release/bioc/html/limma.html. [En ligne] 
 
 
 
-## Deployment and usage in Galaxy workflows
-...
-
-## Software dependencies
-R packages :
-- optparse : https://CRAN.R-project.org/package=optparse
-- edgeR : https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
-- DESeq2 : https://www.bioconductor.org/packages/release/bioc/html/DESeq2.html
-- preprocessCore : https://www.bioconductor.org/packages/release/bioc/html/preprocessCore.html
 
