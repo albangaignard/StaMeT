@@ -116,7 +116,7 @@ Rscript rnaseq_microarray_fusion.r --standardisation zscore --tables MicroArray_
 
 To use Galaxy , you must create a user account on the computing cluster of BiRD platform: http://www.pf-bird.univ-nantes.fr/demande-de-compte-birdcluster-1354976.kjsp?RH=1442585061597
 
-IV.	Software dependencies
+## IV.	Software dependencies
 R packages:
 -	optparse: https://CRAN.R-project.org/package=optparse
 -	edgeR: https://www.bioconductor.org/packages/release/bioc/html/edgeR.html
@@ -126,7 +126,7 @@ R packages:
 
 
 
-#   3	Bibliographie
+##  V.	References
  - S Anders and W Huber. Differential expression analysis for sequence count data. Genome Biology 2010;11:R106.
 
  - S Anders, W Huber. Differential expression of RNA-Seq data at the gene level – the DESeq package. Last revision 2016-01-12.
