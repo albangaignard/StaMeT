@@ -91,7 +91,7 @@ It allows normalization of RNA-seq count data. Three methods are available: DESe
 The function returns a tab-delimited text file containing the normalized RNA-seq data matrix according to the chosen normalization method. The output matrix has the same dimensions as the input matrix. Also, they have the same names of rows and columns.
 
 ####    II.3.3	Usage in Rscript
-Rscript normalisation.rna_seq.r --gene_number --samples_n1 20 --samples_n2 20 --up_ratio 0.5 --diff_genes_ratio 0.1
+Rscript normalisation.rna_seq.r --count_file RNA_count_BRCA_TCGA_Tum.txt
 
 ### II.4	 “rnaseq_microarray_fusion.r”
 ####    II.4.1	Arguments
