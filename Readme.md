@@ -127,7 +127,9 @@ R packages:
 
 
 ##  V.	References
- - S Anders and W Huber. Differential expression analysis for sequence count data. Genome Biology 2010;11:R106.
+ - DESeq2 : Michael I Love, Wolfgang Huber, and Simon Anders. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology 2014; 15(12): 550. [10.1186/s13059-014-0550-8](https://dx.doi.org/10.1186%2Fs13059-014-0550-8)
+
+
 
  - S Anders, W Huber. Differential expression of RNA-Seq data at the gene level – the DESeq package. Last revision 2016-01-12.
  - DESeq2paper. [http://www-huber.embl.de/DESeq2paper]. [En ligne] 
