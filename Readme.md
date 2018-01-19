@@ -127,17 +127,9 @@ R packages:
 
 
 ##  V.	References
- - DESeq2 : Michael I Love, Wolfgang Huber, and Simon Anders. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology 2014; 15(12): 550. [10.1186/s13059-014-0550-8](https://dx.doi.org/10.1186%2Fs13059-014-0550-8)
-
-
-
- - S Anders, W Huber. Differential expression of RNA-Seq data at the gene level – the DESeq package. Last revision 2016-01-12.
- - DESeq2paper. [http://www-huber.embl.de/DESeq2paper]. [En ligne] 
- - MD Robinson, DJ McCarthy, GK Smyth. edgeR: a Bioconductor package for differential expression analysis of digital gene expression data. Bioinformatics. 2010
-
- - edgeR: Empirical Analysis of Digital Gene Expression Data in R. https://bioconductor.org/packages/release/bioc/html/edgeR.html. [En ligne] 
- - Charity W Law, Yunshun Chen, Wei Shi and Gordon K Smyth. voom: precision weights unlock linear model analysis tools for RNA-seq read counts. Genome Biology. 15:R29, 2014.
- - Limma: Linear Models for Microarray Data. http://bioconductor.org/packages/release/bioc/html/limma.html. [En ligne] 
+ - DESeq2: Michael I Love, Wolfgang Huber, and Simon Anders. Moderated estimation of fold change and dispersion for RNA-seq data with DESeq2. Genome Biology 2014; 15(12): 550. DOI: [10.1186/s13059-014-0550-8](https://dx.doi.org/10.1186%2Fs13059-014-0550-8)
+ - edgeR: MD Robinson, DJ McCarthy, GK Smyth. edgeR: a Bioconductor package for differential expression analysis of digital gene expression data. Bioinformatics. 2010 Jan 1;26(1):139-40. DOI: [10.1093/bioinformatics/btp616](https://doi.org/10.1093/bioinformatics/btp616)
+ - voom: Charity W Law, Yunshun Chen, Wei Shi and Gordon K Smyth. voom: precision weights unlock linear model analysis tools for RNA-seq read counts. Genome Biology. 15:R29, 2014. DOI: [10.1186/gb-2014-15-2-r29](https://doi.org/10.1186/gb-2014-15-2-r29)
 
 
 
