@@ -10,7 +10,10 @@
 </edam_operations>
 
 <requirements>
-    <requirement type="package" version="0.1.0">rnanormtb</requirement>
+    <requirement type="package" version="3.3.2">r-base</requirement>
+    <requirement type="package" version="1.3.2">r-optparse</requirement>
+    <requirement type="package" version="3.98_1.5">r-xml</requirement>
+    <requirement type="package" version="1.34.0">bioconductor-preprocesscore</requirement>
 </requirements>
 
   <command interpreter="Rscript">
@@ -20,7 +23,6 @@
     --standardisation $standardisation
     --all_genes $all_genes
   </command>
-
 
   <inputs>
     <param name="tables" type="data" format="tabular" multiple="true" label="Gene expression tables"/>
