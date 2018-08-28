@@ -1,0 +1,7 @@
+name: multi-transcripts-env
+
+dependencies:
+        - r-base=3.3.2
+        - r-optparse
+        - r-xml
+        - bioconductor-preprocesscore
